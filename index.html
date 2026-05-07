@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WEST_PARTS.07 — Автозапчасти</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C55A;
+      --gold-bright: #F5D470;
+      --gold-dim: #8a6e2a;
+      --bg: #080808;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --bg4: #222222;
+      --text: #f5f5f5;
+      --text-muted: #999999;
+      --border: rgba(201,168,76,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 40px;
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    header.scrolled {
+      background: rgba(8,8,8,0.97);
+      box-shadow: 0 4px 30px rgba(201,168,76,0.08);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-wrap { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+    .logo-wrap:hover .logo-text { text-shadow: 0 0 18px rgba(201,168,76,0.6); }
+    .logo img {
+      height: 50px; width: auto; object-fit: contain;
+      mix-blend-mode: screen;
+      filter: brightness(1.15) saturate(1.2);
+    }
+    .logo-text {
+      font-size: 17px; font-weight: 900; letter-spacing: 2px;
+      background: linear-gradient(135deg, #E8C55A 0%, #C9A84C 50%, #F5D470 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-transform: uppercase; white-space: nowrap; display: block;
+    }
+
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.5px;
+      transition: color 0.2s; position: relative;
+    }
+    nav a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--gold); transform: scaleX(0); transition: transform 0.3s;
+    }
+    nav a:hover { color: var(--gold); }
+    nav a:hover::after { transform: scaleX(1); }
+
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .lang-switcher {
+      display: flex; align-items: center; gap: 2px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; padding: 3px; overflow: hidden;
+    }
+    .lang-btn {
+      padding: 5px 12px; border: none; background: transparent;
+      color: var(--text-muted); font-size: 12px; font-weight: 600;
+      cursor: pointer; border-radius: 6px; transition: all 0.2s;
+      font-family: 'Inter', sans-serif; letter-spacing: 0.5px;
+    }
+    .lang-btn.active { background: var(--gold); color: #000; }
+    .lang-btn:not(.active):hover { color: var(--gold); }
+
+    .btn-cta {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: #000; border: none; padding: 10px 22px;
+      border-radius: 8px; font-size: 13px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.5px; transition: all 0.3s;
+      font-family: 'Inter', sans-serif; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.35); }
+
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+    .menu-toggle span {
+      display: block; width: 24px; height: 2px;
+      background: var(--gold); margin: 5px 0; transition: all 0.3s;
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+      padding: 120px 80px 80px;
+      position: relative; overflow: hidden;
+    }
+
+    /* Radial glow */
+    .hero-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Grid lines */
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Road */
+    .road {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 130px;
+      background: linear-gradient(180deg, transparent 0%, rgba(20,20,20,0.9) 40%, #141414 100%);
+      overflow: hidden;
+    }
+    .road-line {
+      position: absolute; bottom: 40px; height: 4px; width: 100px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      border-radius: 2px; animation: roadLine 2.4s linear infinite; opacity: 0.5;
+    }
+    .road-line:nth-child(1) { animation-delay: 0s; }
+    .road-line:nth-child(2) { animation-delay: 0.8s; }
+    .road-line:nth-child(3) { animation-delay: 1.6s; }
+    @keyframes roadLine {
+      from { left: 110%; }
+      to { left: -120px; }
+    }
+
+    /* Car SVG animation */
+    .car-wrapper {
+      position: absolute; bottom: 36px; right: -520px;
+      animation: carDrive 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+      filter: drop-shadow(0 0 30px rgba(201,168,76,0.4)) drop-shadow(0 4px 16px rgba(0,0,0,0.8));
+    }
+    @keyframes carDrive {
+      0% { right: -520px; opacity: 0; }
+      20% { opacity: 1; }
+      100% { right: 40px; opacity: 1; }
+    }
+    .car-svg { width: 480px; }
+
+    /* Speed lines */
+    .speed-lines {
+      position: absolute; bottom: 60px; right: 500px; width: 300px; height: 60px;
+      opacity: 0;
+      animation: speedLinesAppear 0.5s ease-out 1.8s forwards;
+    }
+    @keyframes speedLinesAppear {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .speed-line {
+      position: absolute; right: 0; height: 2px; border-radius: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.6));
+      animation: speedPulse 1.5s ease-in-out infinite;
+    }
+    .speed-line:nth-child(1) { top: 10px; width: 220px; animation-delay: 0s; }
+    .speed-line:nth-child(2) { top: 24px; width: 280px; animation-delay: 0.1s; }
+    .speed-line:nth-child(3) { top: 38px; width: 180px; animation-delay: 0.2s; }
+    .speed-line:nth-child(4) { top: 50px; width: 240px; animation-delay: 0.15s; }
+    @keyframes speedPulse {
+      0%, 100% { opacity: 0.4; transform: scaleX(1); }
+      50% { opacity: 0.8; transform: scaleX(1.05); }
+    }
+
+    /* Particles */
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: var(--gold); opacity: 0;
+      animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+      0% { opacity: 0; transform: translateY(0) scale(0); }
+      10% { opacity: 0.6; transform: translateY(-20px) scale(1); }
+      100% { opacity: 0; transform: translateY(-120px) scale(0.3); }
+    }
+
+    .hero-brand-name {
+      font-size: clamp(28px, 4.5vw, 52px);
+      font-weight: 900; letter-spacing: 4px; text-transform: uppercase;
+      background: linear-gradient(135deg, #E8C55A 0%, #C9A84C 40%, #F5D470 70%, #C9A84C 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 18px; line-height: 1;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+    .hero-brand-name span { opacity: 0.7; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
+      padding: 6px 16px; border-radius: 20px;
+      font-size: 12px; color: var(--gold); font-weight: 600; letter-spacing: 1px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+    .hero-badge::before { content: '●'; font-size: 8px; animation: blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .hero-title {
+      font-size: clamp(42px, 6vw, 80px);
+      font-weight: 900; line-height: 1.05; letter-spacing: -1px;
+      margin-bottom: 24px; max-width: 700px;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+    .hero-title .gold { color: var(--gold); }
+    .hero-title .stroke {
+      -webkit-text-stroke: 1px var(--gold);
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 17px; color: var(--text-muted); line-height: 1.7;
+      max-width: 520px; margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease-out 0.8s both;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: #000; border: none; padding: 16px 36px;
+      border-radius: 10px; font-size: 15px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.5px; transition: all 0.3s;
+      font-family: 'Inter', sans-serif; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,0.4); }
+    .btn-secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid rgba(255,255,255,0.2); padding: 16px 36px;
+      border-radius: 10px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+      font-family: 'Inter', sans-serif; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-secondary:hover {
+      border-color: var(--gold); color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 64px;
+      animation: fadeInUp 0.8s ease-out 1s both;
+    }
+    .stat { }
+    .stat-value {
+      font-size: 32px; font-weight: 800; color: var(--gold); display: block;
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-ind {
+      position: absolute; bottom: 140px; left: 80px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0.5; animation: fadeInUp 1s ease-out 1.4s both;
+    }
+    .scroll-ind span { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); writing-mode: vertical-rl; }
+    .scroll-mouse {
+      width: 22px; height: 34px; border: 1.5px solid var(--text-muted);
+      border-radius: 11px; position: relative;
+    }
+    .scroll-mouse::after {
+      content: ''; position: absolute; top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 3px; height: 6px; background: var(--gold); border-radius: 2px;
+      animation: scrollDot 1.5s ease-in-out infinite;
+    }
+    @keyframes scrollDot {
+      0%, 100% { top: 6px; opacity: 1; }
+      100% { top: 18px; opacity: 0; }
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 100px 80px; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+    .section-title {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.5px; margin-bottom: 16px;
+    }
+    .section-sub { font-size: 16px; color: var(--text-muted); max-width: 560px; line-height: 1.7; }
+
+    /* ─── MARQUEE STRIP ─── */
+    .marquee-section {
+      padding: 0; overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      padding: 18px 40px; font-size: 13px; font-weight: 600; letter-spacing: 1px;
+      color: var(--text-muted); display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    .marquee-item .dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ─── CATEGORIES ─── */
+    #categories { background: var(--bg2); }
+    .categories-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 56px;
+    }
+    .cat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 24px;
+      cursor: pointer; transition: all 0.35s;
+      position: relative; overflow: hidden;
+      text-decoration: none; color: var(--text);
+      display: block;
+    }
+    .cat-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.35s;
+    }
+    .cat-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+      transform: scaleX(0); transition: transform 0.35s; transform-origin: left;
+    }
+    .cat-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); }
+    .cat-card:hover::before { opacity: 1; }
+    .cat-card:hover::after { transform: scaleX(1); }
+    .cat-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+    .cat-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .cat-count { font-size: 13px; color: var(--text-muted); }
+    .cat-arrow {
+      position: absolute; top: 24px; right: 24px;
+      color: var(--gold); opacity: 0; transform: translateX(-8px);
+      transition: all 0.3s; font-size: 18px;
+    }
+    .cat-card:hover .cat-arrow { opacity: 1; transform: translateX(0); }
+
+    /* ─── WHY US ─── */
+    #why { background: var(--bg); }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 56px; }
+    .why-visual {
+      position: relative; display: flex; align-items: center; justify-content: center;
+    }
+    .why-circle {
+      width: 340px; height: 340px; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .why-circle::before {
+      content: ''; position: absolute; inset: -20px; border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.08);
+    }
+    .why-circle::after {
+      content: ''; position: absolute; inset: -40px; border-radius: 50%;
+      border: 1px dashed rgba(201,168,76,0.05);
+    }
+    .why-center {
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.03) 60%, transparent 100%);
+      border: 1px solid rgba(201,168,76,0.25);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .why-center-num { font-size: 40px; font-weight: 900; color: var(--gold); }
+    .why-center-txt { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .why-orbit-item {
+      position: absolute; width: 56px; height: 56px; border-radius: 50%;
+      background: var(--bg3); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    }
+    .why-orbit-item:nth-child(1) { top: -8px; left: 50%; transform: translateX(-50%); }
+    .why-orbit-item:nth-child(2) { right: -8px; top: 50%; transform: translateY(-50%); }
+    .why-orbit-item:nth-child(3) { bottom: -8px; left: 50%; transform: translateX(-50%); }
+    .why-orbit-item:nth-child(4) { left: -8px; top: 50%; transform: translateY(-50%); }
+
+    .why-items { display: flex; flex-direction: column; gap: 24px; }
+    .why-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 24px; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 14px; transition: all 0.3s;
+    }
+    .why-item:hover { border-color: rgba(201,168,76,0.3); transform: translateX(4px); }
+    .why-item-icon {
+      width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .why-item-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .why-item-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── PRODUCTS ─── */
+    #products { background: var(--bg2); }
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+    .product-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; transition: all 0.35s; cursor: pointer;
+    }
+    .product-card:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .product-img {
+      height: 180px; background: var(--bg4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; position: relative; overflow: hidden;
+    }
+    .product-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 50%, var(--bg3) 100%);
+    }
+    .product-badge {
+      position: absolute; top: 12px; left: 12px; z-index: 1;
+      background: var(--gold); color: #000; font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 5px; letter-spacing: 0.5px;
+    }
+    .product-body { padding: 20px; }
+    .product-brand { font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
+    .product-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+    .product-compat { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { font-size: 20px; font-weight: 800; color: var(--gold); }
+    .product-btn {
+      background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold); padding: 8px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; font-family: 'Inter', sans-serif;
+    }
+    .product-btn:hover { background: var(--gold); color: #000; }
+
+    /* ─── HOW TO ORDER ─── */
+    #how { background: var(--bg); }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 64px; position: relative; }
+    .steps::before {
+      content: ''; position: absolute; top: 36px; left: calc(12.5% + 28px); right: calc(12.5% + 28px);
+      height: 1px; background: linear-gradient(90deg, var(--gold-dim), var(--gold-dim));
+      background: repeating-linear-gradient(90deg, var(--gold-dim) 0px, var(--gold-dim) 8px, transparent 8px, transparent 16px);
+    }
+    .step { text-align: center; position: relative; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+      color: #000; font-size: 20px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    }
+    .step-icon { font-size: 28px; margin-bottom: 16px; }
+    .step-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .step-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── BRANDS ─── */
+    #brands { background: var(--bg2); padding: 60px 80px; }
+    .brands-row {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      margin-top: 40px;
+    }
+    .brand-chip {
+      padding: 10px 24px; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text-muted);
+      letter-spacing: 1px; transition: all 0.2s; cursor: pointer;
+    }
+    .brand-chip:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ─── TESTIMONIALS ─── */
+    #reviews { background: var(--bg); }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+    .review-card {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px; transition: all 0.3s;
+    }
+    .review-card:hover { border-color: rgba(201,168,76,0.25); }
+    .review-stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+    .review-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: #000; flex-shrink: 0;
+    }
+    .review-name { font-size: 14px; font-weight: 700; }
+    .review-city { font-size: 12px; color: var(--text-muted); }
+
+    /* ─── CTA BANNER ─── */
+    #cta {
+      background: var(--bg2); padding: 80px;
+      position: relative; overflow: hidden;
+    }
+    .cta-inner {
+      background: linear-gradient(135deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.04) 50%, transparent 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 24px; padding: 64px 80px;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+      position: relative; overflow: hidden;
+    }
+    .cta-inner::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-title { font-size: 36px; font-weight: 900; line-height: 1.2; margin-bottom: 12px; }
+    .cta-sub { font-size: 16px; color: var(--text-muted); }
+    .cta-actions { display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+    .btn-whatsapp {
+      background: #25D366; color: #fff; border: none; padding: 16px 36px;
+      border-radius: 10px; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-whatsapp:hover { background: #20ba58; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,211,102,0.3); }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--bg); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 56px; align-items: start; }
+    .contact-info { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 20px; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 12px; transition: border-color 0.2s;
+    }
+    .contact-item:hover { border-color: rgba(201,168,76,0.3); }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .contact-label { font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .contact-value { font-size: 15px; font-weight: 600; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .form-input {
+      background: var(--bg3); border: 1px solid var(--border);
+      padding: 14px 16px; border-radius: 10px; color: var(--text);
+      font-size: 14px; font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s; outline: none;
+    }
+    .form-input:focus { border-color: rgba(201,168,76,0.5); }
+    .form-input::placeholder { color: var(--text-muted); }
+    textarea.form-input { height: 120px; resize: vertical; }
+    .form-submit { align-self: flex-start; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 60px 80px 32px;
+    }
+    .footer-main { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
+    .footer-brand .logo { margin-bottom: 16px; display: inline-flex; }
+    .footer-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 280px; margin-bottom: 24px; }
+    .footer-social { display: flex; gap: 10px; }
+    .social-btn {
+      width: 38px; height: 38px; border-radius: 9px; background: var(--bg3);
+      border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .social-btn:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .footer-col h4 {
+      font-size: 14px; font-weight: 700; margin-bottom: 20px; color: var(--gold); letter-spacing: 0.5px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a {
+      color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--text); }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: var(--text-muted);
+    }
+
+    /* ─── UTILITY ─── */
+    .gold-link { color: var(--gold); text-decoration: none; }
+    .gold-link:hover { text-decoration: underline; }
+    .btn-center { justify-content: center; }
+    .footer-logo-img { height: 40px; }
+    .footer-logo-img--blend { mix-blend-mode: screen; filter: brightness(1.15); }
+    .footer-logo-block { margin-bottom: 12px; }
+
+    /* ─── CAR BRANDS SECTION ─── */
+    #car-brands { background: var(--bg); overflow: hidden; }
+    .brands-scroll-wrap { position: relative; overflow: hidden; margin-top: 56px; }
+    .brands-scroll-wrap::before,
+    .brands-scroll-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+    }
+    .brands-scroll-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg) 0%, transparent 100%); }
+    .brands-scroll-wrap::after  { right: 0; background: linear-gradient(270deg, var(--bg) 0%, transparent 100%); }
+
+    .brands-scroll-row { display: flex; gap: 16px; margin-bottom: 16px; will-change: transform; }
+    .brands-scroll-row.row1 { animation: scrollLeft  28s linear infinite; }
+    .brands-scroll-row.row2 { animation: scrollRight 32s linear infinite; }
+    @keyframes scrollLeft  { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+    @keyframes scrollRight { from { transform: translate3d(-50%,0,0); } to { transform: translate3d(0,0,0); } }
+    .brands-scroll-wrap:hover .brands-scroll-row { animation-play-state: paused; }
+
+    .car-brand-card {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 22px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 14px; transition: all 0.3s; cursor: default;
+      min-width: 160px;
+    }
+    .car-brand-card:hover {
+      border-color: rgba(201,168,76,0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .car-brand-logo {
+      width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0;
+      background: var(--brand-bg, #1a1a1a);
+      display: flex; align-items: center; justify-content: center;
+      padding: 6px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .car-brand-logo svg { width: 100%; height: 100%; }
+    .brand-logo-img { width: 100%; height: 100%; object-fit: contain; filter: brightness(1.1); }
+    .brand-logo-svg { width: 100%; height: 100%; align-items: center; justify-content: center; }
+    .car-brand-info { min-width: 0; }
+    .car-brand-name { font-size: 14px; font-weight: 700; white-space: nowrap; }
+    .car-brand-origin { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .origin-tabs {
+      display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;
+    }
+    .origin-tab {
+      padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      border: 1px solid var(--border); background: var(--bg3); color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .origin-tab.active, .origin-tab:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+
+    .avail-badges {
+      display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap;
+    }
+    .avail-badges--top { margin-top: 32px; }
+    .origin-tabs--top  { margin-top: 32px; }
+    .avail-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 10px;
+      background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.2);
+      font-size: 13px; font-weight: 600; color: var(--text-muted);
+    }
+    .avail-badge .dot-g { width: 8px; height: 8px; border-radius: 50%; background: #25D366; flex-shrink: 0; }
+    .avail-badge .dot-o { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    /* ─── 2GIS MAP CARD ─── */
+    .map-card {
+      margin-top: 40px; border-radius: 20px; overflow: hidden;
+      border: 1px solid rgba(201,168,76,0.25); position: relative;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 36px 48px; gap: 32px; flex-wrap: wrap;
+      background: var(--bg3);
+    }
+    .map-card-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.07) 0%, transparent 60%);
+    }
+    .map-card-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .map-card-left { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+    .map-card-icon { flex-shrink: 0; }
+    .map-card-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .map-card-meta { font-size: 14px; color: var(--text-muted); }
+    .btn-2gis {
+      position: relative; z-index: 1; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+      color: #000; border: none; padding: 16px 32px; border-radius: 12px;
+      font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-2gis:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,0.4); }
+    .map-card--center { justify-content: center; padding: 40px; }
+    .btn-2gis--large { font-size: 17px; padding: 18px 44px; }
+    @media (max-width: 768px) {
+      .map-card { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ─── FLOATING WA ─── */
+    .wa-float {
+      position: fixed; bottom: 32px; right: 32px; z-index: 999;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25D366; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+      animation: waFloat 2s ease-in-out infinite; text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.1); animation-play-state: paused; }
+    .wa-float svg { width: 28px; height: 28px; fill: white; }
+    @keyframes waFloat {
+      0%, 100% { box-shadow: 0 8px 32px rgba(37,211,102,0.4); }
+      50% { box-shadow: 0 8px 48px rgba(37,211,102,0.7); }
+    }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: all 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 1024px) {
+      section { padding: 80px 40px; }
+      header { padding: 0 24px; }
+      #hero { padding: 120px 40px 80px; }
+      .categories-grid { grid-template-columns: repeat(2, 1fr); }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: 1fr; }
+      .why-visual { display: none; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .steps::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; position: fixed; top: 72px; left: 0; right: 0; background: rgba(8,8,8,0.98); padding: 24px; gap: 20px; border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); }
+      .menu-toggle { display: block; }
+      .btn-cta { display: none; }
+      section { padding: 64px 24px; }
+      #hero { padding: 100px 24px 60px; }
+      .hero-stats { gap: 32px; }
+      .car-wrapper { right: -300px; }
+      .car-svg { width: 280px; }
+      @keyframes carDrive { 100% { right: -20px; opacity: 1; } }
+      .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .products-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .cta-inner { flex-direction: column; padding: 40px 32px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .steps { grid-template-columns: 1fr; gap: 16px; }
+      #brands { padding: 48px 24px; }
+      #cta { padding: 40px 24px; }
+      footer { padding: 48px 24px 24px; }
+      .hero-title { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a href="#" class="logo logo-wrap">
+    <img src="Image/logo.jpeg" alt="WEST_PARTS.07" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" />
+    <span class="logo-text">WEST_PARTS.07</span>
+  </a>
+  <nav id="nav">
+    <a href="#categories" data-i18n="nav_catalog">Каталог</a>
+    <a href="#brands" data-i18n="nav_brands">Бренды</a>
+    <a href="#how" data-i18n="nav_how">Как заказать</a>
+    <a href="#reviews" data-i18n="nav_reviews">Отзывы</a>
+    <a href="#contact" data-i18n="nav_contact">Контакты</a>
+  </nav>
+  <div class="header-right">
+    <div class="lang-switcher">
+      <button class="lang-btn" onclick="setLang('kz')" id="btn-kz">ҚАЗ</button>
+      <button class="lang-btn active" onclick="setLang('ru')" id="btn-ru">РУС</button>
+    </div>
+    <a href="#contact" class="btn-cta">
+      <span data-i18n="header_cta">Заказать</span>
+    </a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-badge">
+    <span data-i18n="hero_badge">Западный Казахстан · Уральск</span>
+  </div>
+
+  <div class="hero-brand-name">WEST_PARTS<span>.07</span></div>
+
+  <h1 class="hero-title">
+    <span data-i18n="hero_title1">Оригинальные</span><br/>
+    <span class="gold" data-i18n="hero_title2">автозапчасти</span><br/>
+    <span class="stroke" data-i18n="hero_title3">с гарантией</span>
+  </h1>
+
+  <p class="hero-sub" data-i18n="hero_sub">
+    Более 10 000 наименований запчастей для любых марок автомобилей. Быстрая доставка, официальные бренды, профессиональные консультации.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#categories" class="btn-primary">
+      <span data-i18n="hero_btn1">Смотреть каталог</span>
+      <span>→</span>
+    </a>
+    <a href="https://wa.me/77081094772" class="btn-secondary" target="_blank">
+      <span>📱</span>
+      <span data-i18n="hero_btn2">Написать в WhatsApp</span>
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-value">10K+</span>
+      <span class="stat-label" data-i18n="stat1">Наименований</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">500+</span>
+      <span class="stat-label" data-i18n="stat2">Брендов</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">5 лет</span>
+      <span class="stat-label" data-i18n="stat3">На рынке</span>
+    </div>
+  </div>
+
+  <!-- Car animation -->
+  <div class="car-wrapper">
+    <svg class="car-svg" viewBox="0 0 480 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Car body shadow -->
+      <ellipse cx="240" cy="145" rx="200" ry="12" fill="rgba(0,0,0,0.4)"/>
+      <!-- Car body -->
+      <path d="M40 110 L60 110 L80 65 L140 50 L220 42 L300 42 L360 55 L400 80 L420 110 L440 110 L440 130 L40 130 Z" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+      <!-- Gold trim line -->
+      <path d="M60 110 L80 65 L140 50 L220 42 L300 42 L360 55 L400 80 L420 110" stroke="#C9A84C" stroke-width="2" fill="none"/>
+      <!-- Windshield -->
+      <path d="M160 50 L145 90 L310 90 L295 50 Z" fill="rgba(100,160,255,0.15)" stroke="#C9A84C" stroke-width="1"/>
+      <!-- Side windows -->
+      <path d="M100 60 L85 90 L145 90 L152 55 Z" fill="rgba(100,160,255,0.1)" stroke="#555" stroke-width="0.5"/>
+      <path d="M300 50 L305 90 L365 90 L350 56 Z" fill="rgba(100,160,255,0.1)" stroke="#555" stroke-width="0.5"/>
+      <!-- Door lines -->
+      <line x1="225" y1="92" x2="230" y2="130" stroke="#333" stroke-width="1"/>
+      <!-- Front grille -->
+      <rect x="405" y="88" width="30" height="28" rx="4" fill="#111" stroke="#C9A84C" stroke-width="1.5"/>
+      <line x1="405" y1="99" x2="435" y2="99" stroke="#C9A84C" stroke-width="0.7"/>
+      <line x1="405" y1="107" x2="435" y2="107" stroke="#C9A84C" stroke-width="0.7"/>
+      <!-- Headlights -->
+      <ellipse cx="434" cy="94" rx="8" ry="5" fill="#E8C55A" opacity="0.9"/>
+      <ellipse cx="434" cy="94" rx="5" ry="3" fill="white" opacity="0.9"/>
+      <!-- Headlight beam -->
+      <polygon points="442,92 490,84 490,104 442,96" fill="url(#beam)" opacity="0.3"/>
+      <defs>
+        <linearGradient id="beam" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#F5D470" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#F5D470" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- Tail light -->
+      <rect x="37" y="92" width="12" height="20" rx="3" fill="#cc2200" opacity="0.8"/>
+      <!-- Roof antenna -->
+      <line x1="240" y1="42" x2="244" y2="26" stroke="#C9A84C" stroke-width="1.5"/>
+      <!-- Hood scoop -->
+      <path d="M365 65 L380 60 L390 62 L378 68 Z" fill="#2a2a2a" stroke="#C9A84C" stroke-width="0.7"/>
+      <!-- Front wheel -->
+      <circle cx="360" cy="130" r="26" fill="#111" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="360" cy="130" r="18" fill="#0a0a0a" stroke="#555" stroke-width="1"/>
+      <circle cx="360" cy="130" r="7" fill="#C9A84C"/>
+      <line x1="360" y1="112" x2="360" y2="148" stroke="#444" stroke-width="1.5"/>
+      <line x1="342" y1="130" x2="378" y2="130" stroke="#444" stroke-width="1.5"/>
+      <line x1="347" y1="117" x2="373" y2="143" stroke="#444" stroke-width="1.5"/>
+      <line x1="373" y1="117" x2="347" y2="143" stroke="#444" stroke-width="1.5"/>
+      <!-- Rear wheel -->
+      <circle cx="120" cy="130" r="26" fill="#111" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="120" cy="130" r="18" fill="#0a0a0a" stroke="#555" stroke-width="1"/>
+      <circle cx="120" cy="130" r="7" fill="#C9A84C"/>
+      <line x1="120" y1="112" x2="120" y2="148" stroke="#444" stroke-width="1.5"/>
+      <line x1="102" y1="130" x2="138" y2="130" stroke="#444" stroke-width="1.5"/>
+      <line x1="107" y1="117" x2="133" y2="143" stroke="#444" stroke-width="1.5"/>
+      <line x1="133" y1="117" x2="107" y2="143" stroke="#444" stroke-width="1.5"/>
+      <!-- Side mirrors -->
+      <rect x="408" y="74" width="14" height="9" rx="2" fill="#222" stroke="#C9A84C" stroke-width="0.8"/>
+      <!-- Exhaust -->
+      <rect x="38" y="122" width="16" height="6" rx="3" fill="#333"/>
+    </svg>
+  </div>
+
+  <!-- Speed lines -->
+  <div class="speed-lines">
+    <div class="speed-line"></div>
+    <div class="speed-line"></div>
+    <div class="speed-line"></div>
+    <div class="speed-line"></div>
+  </div>
+
+  <!-- Road -->
+  <div class="road">
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+  </div>
+
+  <div class="scroll-ind">
+    <div class="scroll-mouse"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m1">ОРИГИНАЛЬНЫЕ ЗАПЧАСТИ</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m2">БЫСТРАЯ ДОСТАВКА</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m3">ГАРАНТИЯ КАЧЕСТВА</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m4">500+ БРЕНДОВ</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m5">ПРОФЕССИОНАЛЬНАЯ КОНСУЛЬТАЦИЯ</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m6">ЗАПАДНЫЙ КАЗАХСТАН</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m1">ОРИГИНАЛЬНЫЕ ЗАПЧАСТИ</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m2">БЫСТРАЯ ДОСТАВКА</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m3">ГАРАНТИЯ КАЧЕСТВА</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m4">500+ БРЕНДОВ</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m5">ПРОФЕССИОНАЛЬНАЯ КОНСУЛЬТАЦИЯ</span></span>
+    <span class="marquee-item"><span class="dot"></span><span data-i18n="m6">ЗАПАДНЫЙ КАЗАХСТАН</span></span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-label" data-i18n="cat_label">Каталог</div>
+  <h2 class="section-title reveal" data-i18n="cat_title">Категории запчастей</h2>
+  <p class="section-sub reveal" data-i18n="cat_sub">Всё необходимое для вашего автомобиля в одном месте</p>
+  <div class="categories-grid">
+    <a href="#" class="cat-card reveal reveal-delay-1">
+      <span class="cat-icon">🔧</span>
+      <div class="cat-name" data-i18n="cat1">Двигатель</div>
+      <div class="cat-count" data-i18n="cat1c">1 200+ запчастей</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-2">
+      <span class="cat-icon">🛑</span>
+      <div class="cat-name" data-i18n="cat2">Тормозная система</div>
+      <div class="cat-count" data-i18n="cat2c">800+ запчастей</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-3">
+      <span class="cat-icon">🔩</span>
+      <div class="cat-name" data-i18n="cat3">Подвеска и рулевое</div>
+      <div class="cat-count" data-i18n="cat3c">950+ запчастей</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-4">
+      <span class="cat-icon">⚡</span>
+      <div class="cat-name" data-i18n="cat4">Электрика</div>
+      <div class="cat-count" data-i18n="cat4c">1 500+ запчастей</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-1">
+      <span class="cat-icon">🛞</span>
+      <div class="cat-name" data-i18n="cat5">Шины и диски</div>
+      <div class="cat-count" data-i18n="cat5c">600+ позиций</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-2">
+      <span class="cat-icon">🛢️</span>
+      <div class="cat-name" data-i18n="cat6">Масла и фильтры</div>
+      <div class="cat-count" data-i18n="cat6c">400+ позиций</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-3">
+      <span class="cat-icon">🚗</span>
+      <div class="cat-name" data-i18n="cat7">Кузовные детали</div>
+      <div class="cat-count" data-i18n="cat7c">700+ запчастей</div>
+      <span class="cat-arrow">→</span>
+    </a>
+    <a href="#" class="cat-card reveal reveal-delay-4">
+      <span class="cat-icon">🎛️</span>
+      <div class="cat-name" data-i18n="cat8">Аксессуары</div>
+      <div class="cat-count" data-i18n="cat8c">300+ позиций</div>
+      <span class="cat-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-label" data-i18n="why_label">Преимущества</div>
+  <h2 class="section-title reveal" data-i18n="why_title">Почему выбирают нас</h2>
+  <div class="why-grid">
+    <div class="why-visual">
+      <div class="why-circle">
+        <span class="why-orbit-item">🏆</span>
+        <span class="why-orbit-item">🚀</span>
+        <span class="why-orbit-item">✅</span>
+        <span class="why-orbit-item">💬</span>
+        <div class="why-center">
+          <span class="why-center-num">5★</span>
+          <span class="why-center-txt" data-i18n="why_rating">РЕЙТИНГ</span>
+        </div>
+      </div>
+    </div>
+    <div class="why-items">
+      <div class="why-item reveal">
+        <div class="why-item-icon">🏆</div>
+        <div>
+          <div class="why-item-title" data-i18n="why1t">Только оригинал</div>
+          <div class="why-item-text" data-i18n="why1d">Работаем только с официальными дистрибьюторами. Все запчасти имеют сертификаты подлинности.</div>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-1">
+        <div class="why-item-icon">⚡</div>
+        <div>
+          <div class="why-item-title" data-i18n="why2t">Быстрая доставка</div>
+          <div class="why-item-text" data-i18n="why2d">Доставка по Уральску в день заказа. По Казахстану — 1–3 рабочих дня.</div>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <div class="why-item-icon">💬</div>
+        <div>
+          <div class="why-item-title" data-i18n="why3t">Экспертная консультация</div>
+          <div class="why-item-text" data-i18n="why3d">Наши специалисты помогут подобрать нужную запчасть по VIN-коду или описанию.</div>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-3">
+        <div class="why-item-icon">🛡️</div>
+        <div>
+          <div class="why-item-title" data-i18n="why4t">Гарантия на все товары</div>
+          <div class="why-item-text" data-i18n="why4d">Предоставляем гарантию на каждую запчасть. Обмен или возврат без лишних вопросов.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-label" data-i18n="prod_label">Популярное</div>
+  <h2 class="section-title reveal" data-i18n="prod_title">Популярные товары</h2>
+  <p class="section-sub reveal" data-i18n="prod_sub">Самые востребованные запчасти по лучшим ценам</p>
+  <div class="products-grid">
+    <div class="product-card reveal">
+      <div class="product-img">
+        🔧
+        <div class="product-badge" data-i18n="badge_hit">ХИТ</div>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">BOSCH</div>
+        <div class="product-name" data-i18n="prod1n">Масляный фильтр BOSCH P7177</div>
+        <div class="product-compat" data-i18n="prod1c">Toyota, Honda, Kia, Hyundai</div>
+        <div class="product-footer">
+          <div class="product-price">2 800 ₸</div>
+          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-img">
+        🛑
+        <div class="product-badge" data-i18n="badge_new">НОВИНКА</div>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">BREMBO</div>
+        <div class="product-name" data-i18n="prod2n">Тормозные колодки Brembo P85 020</div>
+        <div class="product-compat" data-i18n="prod2c">BMW 3 series, Mercedes C-class</div>
+        <div class="product-footer">
+          <div class="product-price">18 500 ₸</div>
+          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-img">⚡</div>
+      <div class="product-body">
+        <div class="product-brand">VALEO</div>
+        <div class="product-name" data-i18n="prod3n">Генератор Valeo 437576</div>
+        <div class="product-compat" data-i18n="prod3c">Volkswagen, Audi, Skoda</div>
+        <div class="product-footer">
+          <div class="product-price">65 000 ₸</div>
+          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-3">
+      <div class="product-img">
+        🔩
+        <div class="product-badge" data-i18n="badge_sale">–20%</div>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">FEBI</div>
+        <div class="product-name" data-i18n="prod4n">Стойка стабилизатора FEBI 32557</div>
+        <div class="product-compat" data-i18n="prod4c">Opel, Chevrolet, Daewoo</div>
+        <div class="product-footer">
+          <div class="product-price">4 200 ₸</div>
+          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-img">🛢️</div>
+      <div class="product-body">
+        <div class="product-brand">MOBIL</div>
+        <div class="product-name" data-i18n="prod5n">Масло Mobil 1 5W-30 (4л)</div>
+        <div class="product-compat" data-i18n="prod5c">Универсальное, все марки</div>
+        <div class="product-footer">
+          <div class="product-price">22 000 ₸</div>
+          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-img">
+        🔋
+        <div class="product-badge" data-i18n="badge_hit">ХИТ</div>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">VARTA</div>
+        <div class="product-name" data-i18n="prod6n">Аккумулятор Varta Blue 60Ah</div>
+        <div class="product-compat" data-i18n="prod6c">Все легковые автомобили</div>
+        <div class="product-footer">
+          <div class="product-price">38 000 ₸</div>
+          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO ORDER -->
+<section id="how">
+  <div class="section-label" data-i18n="how_label">Процесс</div>
+  <h2 class="section-title reveal" data-i18n="how_title">Как сделать заказ</h2>
+  <p class="section-sub reveal" data-i18n="how_sub">Всего 4 простых шага и запчасть у вас</p>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <div class="step-icon">🔍</div>
+      <div class="step-title" data-i18n="step1t">Найдите запчасть</div>
+      <div class="step-text" data-i18n="step1d">Выберите в каталоге или напишите нам название / VIN-код</div>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">2</div>
+      <div class="step-icon">📱</div>
+      <div class="step-title" data-i18n="step2t">Свяжитесь с нами</div>
+      <div class="step-text" data-i18n="step2d">WhatsApp, телефон или Instagram — ответим за 15 минут</div>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">3</div>
+      <div class="step-icon">💳</div>
+      <div class="step-title" data-i18n="step3t">Оплатите заказ</div>
+      <div class="step-text" data-i18n="step3d">Наличные, карта Kaspi или перевод — выбирайте удобный способ</div>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-num">4</div>
+      <div class="step-icon">🚚</div>
+      <div class="step-title" data-i18n="step4t">Получите товар</div>
+      <div class="step-text" data-i18n="step4d">Самовывоз или доставка по городу и по всему Казахстану</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAR BRANDS (animated) -->
+<section id="car-brands">
+  <div class="section-label" data-i18n="carbr_label">Автомобили</div>
+  <h2 class="section-title reveal" data-i18n="carbr_title">Запчасти на все популярные марки</h2>
+  <p class="section-sub reveal" data-i18n="carbr_sub">Китайские, японские и корейские автомобили — в наличии и под заказ. Доставка по всему Казахстану.</p>
+
+  <div class="avail-badges reveal avail-badges--top">
+    <div class="avail-badge"><span class="dot-g"></span><span data-i18n="avail1">В наличии</span></div>
+    <div class="avail-badge"><span class="dot-o"></span><span data-i18n="avail2">Под заказ (1–5 дней)</span></div>
+    <div class="avail-badge"><span>🚚</span><span data-i18n="avail3">Доставка по всему Казахстану</span></div>
+    <div class="avail-badge"><span>⚡</span><span data-i18n="avail4">Экспресс-доставка по Уральску</span></div>
+  </div>
+
+  <div class="origin-tabs reveal origin-tabs--top" id="origin-tabs">
+    <button type="button" class="origin-tab active" onclick="filterBrands('all')" data-i18n="tab_all">Все марки</button>
+    <button type="button" class="origin-tab" onclick="filterBrands('cn')" data-i18n="tab_cn">🇨🇳 Китайские</button>
+    <button type="button" class="origin-tab" onclick="filterBrands('jp')" data-i18n="tab_jp">🇯🇵 Японские</button>
+    <button type="button" class="origin-tab" onclick="filterBrands('kr')" data-i18n="tab_kr">🇰🇷 Корейские</button>
+  </div>
+
+  <div class="brands-scroll-wrap reveal" id="brands-scroll-wrap">
+    <!-- Row 1 -->
+    <div class="brands-scroll-row row1" id="scroll-row1"></div>
+    <!-- Row 2 -->
+    <div class="brands-scroll-row row2" id="scroll-row2"></div>
+  </div>
+</section>
+
+<!-- PARTS BRANDS -->
+<section id="brands">
+  <div class="section-label" data-i18n="brands_label">Партнёры</div>
+  <h2 class="section-title reveal" data-i18n="brands_title">Запчасти ведущих брендов</h2>
+  <div class="brands-row">
+    <div class="brand-chip reveal">BOSCH</div>
+    <div class="brand-chip reveal reveal-delay-1">BREMBO</div>
+    <div class="brand-chip reveal reveal-delay-2">VALEO</div>
+    <div class="brand-chip reveal reveal-delay-3">FEBI</div>
+    <div class="brand-chip reveal">NGK</div>
+    <div class="brand-chip reveal reveal-delay-1">SACHS</div>
+    <div class="brand-chip reveal reveal-delay-2">DENSO</div>
+    <div class="brand-chip reveal reveal-delay-3">MOBIL</div>
+    <div class="brand-chip reveal">VARTA</div>
+    <div class="brand-chip reveal reveal-delay-1">MANN</div>
+    <div class="brand-chip reveal reveal-delay-2">SKF</div>
+    <div class="brand-chip reveal reveal-delay-3">GATES</div>
+    <div class="brand-chip reveal">LUCAS</div>
+    <div class="brand-chip reveal reveal-delay-1">LEMFÖRDER</div>
+    <div class="brand-chip reveal reveal-delay-2">CONTINENTAL</div>
+    <div class="brand-chip reveal reveal-delay-3">TRW</div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-label" data-i18n="rev_label">Отзывы</div>
+  <h2 class="section-title reveal" data-i18n="rev_title">Что говорят клиенты</h2>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-i18n="rev1t">«Заказывал тормозные колодки Brembo — пришли быстро, оригинал подтверждён. Ребята всегда на связи, помогли с подбором по VIN. Рекомендую!»</p>
+      <div class="review-author">
+        <div class="review-avatar">А</div>
+        <div>
+          <div class="review-name" data-i18n="rev1n">Азамат Е.</div>
+          <div class="review-city" data-i18n="rev1c">Уральск</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-i18n="rev2t">«Нашла нужный фильтр за 10 минут через WhatsApp. Доставили в тот же день. Цены ниже, чем в других магазинах. Буду покупать только здесь.»</p>
+      <div class="review-author">
+        <div class="review-avatar">Д</div>
+        <div>
+          <div class="review-name" data-i18n="rev2n">Дина М.</div>
+          <div class="review-city" data-i18n="rev2c">Уральск</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-2">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-i18n="rev3t">«Качество отличное, всё с гарантией. Брал аккумулятор Varta и масло Mobil — доволен на 100%. Магазин с профессиональным подходом.»</p>
+      <div class="review-author">
+        <div class="review-avatar">Р</div>
+        <div>
+          <div class="review-name" data-i18n="rev3n">Руслан К.</div>
+          <div class="review-city" data-i18n="rev3c">Атырау</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section id="cta">
+  <div class="cta-inner reveal">
+    <div>
+      <h2 class="cta-title" data-i18n="cta_title">Нужна запчасть?<br/><span style="color:var(--gold)">Напишите сейчас!</span></h2>
+      <p class="cta-sub" data-i18n="cta_sub">Ответим за 15 минут и подберём нужную деталь</p>
+    </div>
+    <div class="cta-actions">
+      <a href="https://wa.me/77081094772" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span data-i18n="cta_btn">WhatsApp</span>
+      </a>
+      <a href="tel:+77081094772" class="btn-secondary btn-center">
+        <span>📞</span>
+        <span data-i18n="cta_btn2">Позвонить</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" data-i18n="cont_label">Контакты</div>
+  <h2 class="section-title reveal" data-i18n="cont_title">Свяжитесь с нами</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item reveal">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label" data-i18n="cont_addr_label">АДРЕС</div>
+          <div class="contact-value" data-i18n="cont_addr">г. Уральск, 4-1 мкр., 28, зд. Car City, 2 эт., оф. 216</div>
+        </div>
+      </div>
+      <div class="contact-item reveal reveal-delay-1">
+        <div class="contact-icon">📱</div>
+        <div>
+          <div class="contact-label">WhatsApp / TEL</div>
+          <div class="contact-value"><a href="tel:+77081094772" class="gold-link">+7 708 109 47 72</a></div>
+        </div>
+      </div>
+      <div class="contact-item reveal reveal-delay-2">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <div class="contact-label" data-i18n="cont_hours_label">РЕЖИМ РАБОТЫ</div>
+          <div class="contact-value" data-i18n="cont_hours">Пн–Сб: 9:00 – 19:00</div>
+        </div>
+      </div>
+      <div class="contact-item reveal reveal-delay-3">
+        <div class="contact-icon">📷</div>
+        <div>
+          <div class="contact-label">INSTAGRAM</div>
+          <div class="contact-value"><a href="https://instagram.com/west_parts.07" target="_blank" rel="noopener noreferrer" class="gold-link">@west_parts.07</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal reveal-delay-1">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_name">Ваше имя</label>
+          <input class="form-input" type="text" data-i18n-placeholder="form_name_ph" placeholder="Имя" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_phone">Телефон</label>
+          <input class="form-input" type="tel" placeholder="+7 ___" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="form_car">Марка / модель авто</label>
+        <input class="form-input" type="text" data-i18n-placeholder="form_car_ph" placeholder="Toyota Camry 2020" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="form_msg">Запчасть / вопрос</label>
+        <textarea class="form-input" data-i18n-placeholder="form_msg_ph" placeholder="Опишите нужную запчасть..."></textarea>
+      </div>
+      <button type="button" class="btn-primary form-submit" onclick="submitForm()">
+        <span data-i18n="form_submit">Отправить заявку</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="map-card map-card--center reveal">
+    <div class="map-card-bg"></div>
+    <div class="map-card-grid"></div>
+    <a href="https://2gis.kz/uralsk/search/%D0%A3%D1%80%D0%B0%D0%BB%D1%8C%D1%81%D0%BA%2C%204-1%20%D0%BC%D0%BA%D1%80%2C%2028" target="_blank" rel="noopener noreferrer" class="btn-2gis btn-2gis--large">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <span data-i18n="map_open">Открыть в 2GIS</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="#" class="logo logo-wrap footer-logo-block">
+        <img src="Image/logo.jpeg" alt="WEST_PARTS.07" class="footer-logo-img footer-logo-img--blend" onerror="this.style.display='none'" />
+        <span class="logo-text">WEST_PARTS.07</span>
+      </a>
+      <p class="footer-desc" data-i18n="footer_desc">Ваш надёжный партнёр в подборе автозапчастей для любых марок. Оригинал. Качество. Гарантия.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/west_parts.07" class="social-btn" title="Instagram" target="_blank" rel="noopener noreferrer">📷</a>
+        <a href="https://wa.me/77081094772" class="social-btn" title="WhatsApp" target="_blank" rel="noopener noreferrer">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="fc1h">Каталог</h4>
+      <ul>
+        <li><a href="#" data-i18n="cat1">Двигатель</a></li>
+        <li><a href="#" data-i18n="cat2">Тормоза</a></li>
+        <li><a href="#" data-i18n="cat3">Подвеска</a></li>
+        <li><a href="#" data-i18n="cat4">Электрика</a></li>
+        <li><a href="#" data-i18n="cat6">Масла / фильтры</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="fc2h">Компания</h4>
+      <ul>
+        <li><a href="#why" data-i18n="fc2_1">О нас</a></li>
+        <li><a href="#brands" data-i18n="fc2_2">Бренды</a></li>
+        <li><a href="#reviews" data-i18n="fc2_3">Отзывы</a></li>
+        <li><a href="#how" data-i18n="fc2_4">Как заказать</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="fc3h">Контакты</h4>
+      <ul>
+        <li><a href="tel:+77081094772">+7 708 109 47 72</a></li>
+        <li><a href="https://wa.me/77081094772" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+        <li><a href="https://instagram.com/west_parts.07" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="#contact" data-i18n="fc3_4">Написать нам</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span data-i18n="footer_copy">© 2024 WEST_PARTS.07. Все права защищены.</span>
+    <span data-i18n="footer_city">Уральск, Казахстан</span>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/77081094772" class="wa-float" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
+// ─── TRANSLATIONS ───────────────────────────────────
+const i18n = {
+  ru: {
+    nav_catalog: 'Каталог', nav_brands: 'Бренды', nav_how: 'Как заказать',
+    nav_reviews: 'Отзывы', nav_contact: 'Контакты', header_cta: 'Заказать',
+    hero_badge: 'Западный Казахстан · Уральск',
+    hero_title1: 'Оригинальные', hero_title2: 'автозапчасти', hero_title3: 'с гарантией',
+    hero_sub: 'Более 10 000 наименований запчастей для любых марок автомобилей. Быстрая доставка, официальные бренды, профессиональные консультации.',
+    hero_btn1: 'Смотреть каталог', hero_btn2: 'Написать в WhatsApp',
+    stat1: 'Наименований', stat2: 'Брендов', stat3: 'На рынке',
+    m1: 'ОРИГИНАЛЬНЫЕ ЗАПЧАСТИ', m2: 'БЫСТРАЯ ДОСТАВКА', m3: 'ГАРАНТИЯ КАЧЕСТВА',
+    m4: '500+ БРЕНДОВ', m5: 'ПРОФЕССИОНАЛЬНАЯ КОНСУЛЬТАЦИЯ', m6: 'ЗАПАДНЫЙ КАЗАХСТАН',
+    cat_label: 'Каталог', cat_title: 'Категории запчастей',
+    cat_sub: 'Всё необходимое для вашего автомобиля в одном месте',
+    cat1: 'Двигатель', cat1c: '1 200+ запчастей',
+    cat2: 'Тормозная система', cat2c: '800+ запчастей',
+    cat3: 'Подвеска и рулевое', cat3c: '950+ запчастей',
+    cat4: 'Электрика', cat4c: '1 500+ запчастей',
+    cat5: 'Шины и диски', cat5c: '600+ позиций',
+    cat6: 'Масла и фильтры', cat6c: '400+ позиций',
+    cat7: 'Кузовные детали', cat7c: '700+ запчастей',
+    cat8: 'Аксессуары', cat8c: '300+ позиций',
+    why_label: 'Преимущества', why_title: 'Почему выбирают нас', why_rating: 'РЕЙТИНГ',
+    why1t: 'Только оригинал', why1d: 'Работаем только с официальными дистрибьюторами. Все запчасти имеют сертификаты подлинности.',
+    why2t: 'Быстрая доставка', why2d: 'Доставка по Уральску в день заказа. По Казахстану — 1–3 рабочих дня.',
+    why3t: 'Экспертная консультация', why3d: 'Наши специалисты помогут подобрать нужную запчасть по VIN-коду или описанию.',
+    why4t: 'Гарантия на все товары', why4d: 'Предоставляем гарантию на каждую запчасть. Обмен или возврат без лишних вопросов.',
+    prod_label: 'Популярное', prod_title: 'Популярные товары',
+    prod_sub: 'Самые востребованные запчасти по лучшим ценам',
+    badge_hit: 'ХИТ', badge_new: 'НОВИНКА', badge_sale: '–20%',
+    prod1n: 'Масляный фильтр BOSCH P7177', prod1c: 'Toyota, Honda, Kia, Hyundai',
+    prod2n: 'Тормозные колодки Brembo P85 020', prod2c: 'BMW 3 series, Mercedes C-class',
+    prod3n: 'Генератор Valeo 437576', prod3c: 'Volkswagen, Audi, Skoda',
+    prod4n: 'Стойка стабилизатора FEBI 32557', prod4c: 'Opel, Chevrolet, Daewoo',
+    prod5n: 'Масло Mobil 1 5W-30 (4л)', prod5c: 'Универсальное, все марки',
+    prod6n: 'Аккумулятор Varta Blue 60Ah', prod6c: 'Все легковые автомобили',
+    prod_buy: 'Заказать',
+    how_label: 'Процесс', how_title: 'Как сделать заказ',
+    how_sub: 'Всего 4 простых шага и запчасть у вас',
+    step1t: 'Найдите запчасть', step1d: 'Выберите в каталоге или напишите нам название / VIN-код',
+    step2t: 'Свяжитесь с нами', step2d: 'WhatsApp, телефон или Instagram — ответим за 15 минут',
+    step3t: 'Оплатите заказ', step3d: 'Наличные, карта Kaspi или перевод — выбирайте удобный способ',
+    step4t: 'Получите товар', step4d: 'Самовывоз или доставка по городу и по всему Казахстану',
+    carbr_label: 'Автомобили', carbr_title: 'Запчасти на все популярные марки',
+    carbr_sub: 'Китайские, японские и корейские автомобили — в наличии и под заказ. Доставка по всему Казахстану.',
+    avail1: 'В наличии', avail2: 'Под заказ (1–5 дней)',
+    avail3: 'Доставка по всему Казахстану', avail4: 'Экспресс-доставка по Уральску',
+    tab_all: 'Все марки', tab_cn: '🇨🇳 Китайские', tab_jp: '🇯🇵 Японские', tab_kr: '🇰🇷 Корейские',
+    map_open: 'Открыть в 2GIS',
+    brands_label: 'Партнёры', brands_title: 'Запчасти ведущих брендов',
+    rev_label: 'Отзывы', rev_title: 'Что говорят клиенты',
+    rev1t: '«Заказывал тормозные колодки Brembo — пришли быстро, оригинал подтверждён. Ребята всегда на связи, помогли с подбором по VIN. Рекомендую!»',
+    rev1n: 'Азамат Е.', rev1c: 'Уральск',
+    rev2t: '«Нашла нужный фильтр за 10 минут через WhatsApp. Доставили в тот же день. Цены ниже, чем в других магазинах. Буду покупать только здесь.»',
+    rev2n: 'Дина М.', rev2c: 'Уральск',
+    rev3t: '«Качество отличное, всё с гарантией. Брал аккумулятор Varta и масло Mobil — доволен на 100%. Магазин с профессиональным подходом.»',
+    rev3n: 'Руслан К.', rev3c: 'Атырау',
+    cta_title: 'Нужна запчасть?<br/><span style="color:var(--gold)">Напишите сейчас!</span>',
+    cta_sub: 'Ответим за 15 минут и подберём нужную деталь',
+    cta_btn: 'WhatsApp', cta_btn2: 'Позвонить',
+    cont_label: 'Контакты', cont_title: 'Свяжитесь с нами',
+    cont_addr_label: 'АДРЕС', cont_addr: 'г. Уральск, 4-1 мкр., 28, зд. Car City, 2 эт., оф. 216',
+    cont_hours_label: 'РЕЖИМ РАБОТЫ', cont_hours: 'Пн–Сб: 9:00 – 19:00',
+    form_name: 'Ваше имя', form_name_ph: 'Имя',
+    form_phone: 'Телефон',
+    form_car: 'Марка / модель авто', form_car_ph: 'Toyota Camry 2020',
+    form_msg: 'Запчасть / вопрос', form_msg_ph: 'Опишите нужную запчасть...',
+    form_submit: 'Отправить заявку',
+    footer_desc: 'Ваш надёжный партнёр в подборе автозапчастей для любых марок. Оригинал. Качество. Гарантия.',
+    fc1h: 'Каталог', fc2h: 'Компания', fc3h: 'Контакты',
+    fc2_1: 'О нас', fc2_2: 'Бренды', fc2_3: 'Отзывы', fc2_4: 'Как заказать', fc3_4: 'Написать нам',
+    footer_copy: '© 2024 WEST_PARTS.07. Все права защищены.', footer_city: 'Уральск, Казахстан'
+  },
+  kz: {
+    nav_catalog: 'Каталог', nav_brands: 'Брендтер', nav_how: 'Қалай тапсырыс беру',
+    nav_reviews: 'Пікірлер', nav_contact: 'Байланыс', header_cta: 'Тапсырыс',
+    hero_badge: 'Батыс Қазақстан · Орал',
+    hero_title1: 'Түпнұсқа', hero_title2: 'автобөлшектер', hero_title3: 'кепілдікпен',
+    hero_sub: 'Кез келген автомобиль маркасына арналған 10 000+ атаудағы бөлшектер. Жылдам жеткізу, ресми брендтер, кәсіби кеңес.',
+    hero_btn1: 'Каталогты қарау', hero_btn2: 'WhatsApp жазу',
+    stat1: 'Атаулар', stat2: 'Брендтер', stat3: 'Нарықта',
+    m1: 'ТҮПНҰСҚА БӨЛШЕКТЕР', m2: 'ЖЫЛДАМ ЖЕТКІЗУ', m3: 'САПА КЕПІЛДІГІ',
+    m4: '500+ БРЕНД', m5: 'КӘСІБИ КЕҢЕС', m6: 'БАТЫС ҚАЗАҚСТАН',
+    cat_label: 'Каталог', cat_title: 'Автобөлшек санаттары',
+    cat_sub: 'Автомобиліңізге қажет барлығы бір жерде',
+    cat1: 'Қозғалтқыш', cat1c: '1 200+ бөлшек',
+    cat2: 'Тежегіш жүйесі', cat2c: '800+ бөлшек',
+    cat3: 'Іліністер жүйесі', cat3c: '950+ бөлшек',
+    cat4: 'Электрика', cat4c: '1 500+ бөлшек',
+    cat5: 'Шиналар мен дискілер', cat5c: '600+ позиция',
+    cat6: 'Майлар мен сүзгілер', cat6c: '400+ позиция',
+    cat7: 'Кузов бөлшектері', cat7c: '700+ бөлшек',
+    cat8: 'Аксессуарлар', cat8c: '300+ позиция',
+    why_label: 'Артықшылықтар', why_title: 'Неге бізді таңдайды', why_rating: 'РЕЙТИНГ',
+    why1t: 'Тек түпнұсқа', why1d: 'Тек ресми дистрибьюторлармен жұмыс істейміз. Барлық бөлшектерде шынайылық сертификаты бар.',
+    why2t: 'Жылдам жеткізу', why2d: 'Оралда тапсырыс берген күні жеткізу. Қазақстан бойынша — 1–3 жұмыс күні.',
+    why3t: 'Сарапшы кеңесі', why3d: 'Мамандарымыз VIN-код немесе сипаттама бойынша қажетті бөлшекті таңдауға көмектеседі.',
+    why4t: 'Барлық тауарға кепілдік', why4d: 'Әр бөлшекке кепілдік беріледі. Артық сұраусыз айырбас немесе қайтару.',
+    prod_label: 'Танымал', prod_title: 'Танымал тауарлар',
+    prod_sub: 'Ең сұранысты бөлшектер ең жақсы бағамен',
+    badge_hit: 'ХИТ', badge_new: 'ЖАҢА', badge_sale: '–20%',
+    prod1n: 'BOSCH P7177 май сүзгісі', prod1c: 'Toyota, Honda, Kia, Hyundai',
+    prod2n: 'Brembo P85 020 тежегіш колодкалары', prod2c: 'BMW 3 series, Mercedes C-class',
+    prod3n: 'Valeo 437576 генераторы', prod3c: 'Volkswagen, Audi, Skoda',
+    prod4n: 'FEBI 32557 тұрақтандырғыш тіреуіші', prod4c: 'Opel, Chevrolet, Daewoo',
+    prod5n: 'Mobil 1 5W-30 майы (4л)', prod5c: 'Барлық маркаларға',
+    prod6n: 'Varta Blue 60Ah аккумуляторы', prod6c: 'Барлық жеңіл автомобильдер',
+    prod_buy: 'Тапсырыс беру',
+    how_label: 'Процесс', how_title: 'Қалай тапсырыс беруге болады',
+    how_sub: 'Небары 4 қарапайым қадам',
+    step1t: 'Бөлшекті табыңыз', step1d: 'Каталогтан таңдаңыз немесе атауын / VIN-кодын жазыңыз',
+    step2t: 'Бізбен байланысыңыз', step2d: 'WhatsApp, телефон немесе Instagram — 15 минутта жауап беріледі',
+    step3t: 'Тапсырысты төлеңіз', step3d: 'Қолма-қол, Kaspi картасы немесе аударым — ыңғайлы тәсілді таңдаңыз',
+    step4t: 'Тауарды алыңыз', step4d: 'Өзіңіз алыңыз немесе қала бойынша жеткізу',
+    carbr_label: 'Автомобильдер', carbr_title: 'Барлық танымал маркаларға бөлшектер',
+    carbr_sub: 'Қытай, жапон және кәріс автомобильдері — қолда бар және тапсырыспен. Бүкіл Қазақстан бойынша жеткізу.',
+    avail1: 'Қолда бар', avail2: 'Тапсырыспен (1–5 күн)',
+    avail3: 'ҚР бойынша жеткізу', avail4: 'Орал бойынша жедел жеткізу',
+    tab_all: 'Барлық маркалар', tab_cn: '🇨🇳 Қытайлық', tab_jp: '🇯🇵 Жапондық', tab_kr: '🇰🇷 Кәрістік',
+    map_open: '2GIS-те ашу',
+    brands_label: 'Серіктестер', brands_title: 'Жетекші брендтердің бөлшектері',
+    rev_label: 'Пікірлер', rev_title: 'Тұтынушылар не дейді',
+    rev1t: '«Brembo тежегіш колодкаларын тапсырыс бердім — тез жетті, түпнұсқалығы расталды. Жігіттер әрдайым байланыста, VIN бойынша таңдауға көмектесті. Ұсынамын!»',
+    rev1n: 'Азамат Е.', rev1c: 'Орал',
+    rev2t: '«WhatsApp арқылы 10 минутта қажетті сүзгіні таптым. Сол күні жеткізді. Бағалары басқа дүкендерден төмен. Тек осында сатып аламын.»',
+    rev2n: 'Дина М.', rev2c: 'Орал',
+    rev3t: '«Сапасы керемет, барлығы кепілдікпен. Varta аккумуляторы мен Mobil майын алдым — 100% қанағаттанамын. Кәсіби қызмет.»',
+    rev3n: 'Руслан К.', rev3c: 'Атырау',
+    cta_title: 'Бөлшек керек пе?<br/><span style="color:var(--gold)">Қазір жазыңыз!</span>',
+    cta_sub: '15 минутта жауап береміз және қажетті бөлшекті таңдаймыз',
+    cta_btn: 'WhatsApp', cta_btn2: 'Қоңырау шалу',
+    cont_label: 'Байланыс', cont_title: 'Бізбен байланысыңыз',
+    cont_addr_label: 'МЕКЕНЖАЙ', cont_addr: 'Орал қ., 4-1 шағ/аудан, 28, Car City ғим., 2 қ., 216 кеңсе',
+    cont_hours_label: 'ЖҰМЫС УАҚЫТЫ', cont_hours: 'Дс–Сб: 9:00 – 19:00',
+    form_name: 'Атыңыз', form_name_ph: 'Аты',
+    form_phone: 'Телефон',
+    form_car: 'Автомобиль маркасы / моделі', form_car_ph: 'Toyota Camry 2020',
+    form_msg: 'Бөлшек / сұрақ', form_msg_ph: 'Қажетті бөлшекті сипаттаңыз...',
+    form_submit: 'Өтінімді жіберу',
+    footer_desc: 'Кез келген маркадағы автобөлшектерді таңдаудағы сенімді серіктесіңіз. Түпнұсқа. Сапа. Кепілдік.',
+    fc1h: 'Каталог', fc2h: 'Компания', fc3h: 'Байланыс',
+    fc2_1: 'Біз туралы', fc2_2: 'Брендтер', fc2_3: 'Пікірлер', fc2_4: 'Тапсырыс беру', fc3_4: 'Бізге жазу',
+    footer_copy: '© 2024 WEST_PARTS.07. Барлық құқықтар қорғалған.', footer_city: 'Орал, Қазақстан'
+  }
+};
+
+let currentLang = 'ru';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+  document.getElementById('btn-kz').classList.toggle('active', lang === 'kz');
+  const t = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+  document.documentElement.lang = lang === 'kz' ? 'kk' : 'ru';
+}
+
+// ─── HEADER SCROLL ──────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ─── MOBILE MENU ────────────────────────────────────
+function toggleMenu() {
+  document.getElementById('nav').classList.toggle('open');
+}
+document.querySelectorAll('#nav a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('nav').classList.remove('open'));
+});
+
+// ─── SCROLL REVEAL ──────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── PARTICLES ──────────────────────────────────────
+(function spawnParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      top:${Math.random() * 100}%;
+      animation-duration:${4 + Math.random() * 6}s;
+      animation-delay:${Math.random() * 8}s;
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// ─── FORM SUBMIT ────────────────────────────────────
+function submitForm() {
+  alert(currentLang === 'ru'
+    ? 'Спасибо! Мы свяжемся с вами в ближайшее время.'
+    : 'Рахмет! Біз сізбен жақын арада байланысамыз.');
+}
+
+// ─── SMOOTH COUNTER ANIMATION ──────────────────────
+function animateCounters() {
+  document.querySelectorAll('.stat-value').forEach(el => {
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.5s';
+      el.style.opacity = '1';
+    }, 1000);
+  });
+}
+animateCounters();
+
+// ─── WIKIMEDIA LOGO URLS ─────────────────────────────
+const W = 'https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/';
+const BRAND_URLS = {
+  toyota:     W + 'Toyota_carlogo.svg',
+  honda:      W + 'Honda-logo.svg',
+  nissan:     W + 'Nissan_2020_logo.svg',
+  mazda:      W + 'Mazda_Motor_Corporation_logo.svg',
+  mitsubishi: W + 'Mitsubishi_Motors_SVG_logo_2.svg',
+  subaru:     W + 'Subaru_logo.svg',
+  suzuki:     W + 'Suzuki_logo_2.svg',
+  lexus:      W + 'Lexus_division_wordmark.svg',
+  infiniti:   W + 'Infiniti_logo.svg',
+  hyundai:    W + 'Hyundai_Motor_Company_logo.svg',
+  kia:        W + 'KIA_logo3.svg',
+  genesis:    W + 'Genesis_Motor_logo.svg',
+  chery:      W + 'Chery_logo.svg',
+  haval:      W + 'Haval_2023_logo.svg',
+  geely:      W + 'Geely_logo.svg',
+  byd:        W + 'BYD_Company,_Ltd._-_Logo.svg',
+  changan:    W + 'Changan_icon.svg',
+  omoda:      W + 'Omoda_wordmark.svg',
+  jaecoo:     W + 'Jaecoo_wordmark.svg',
+  exeed:      W + 'Exeed_logo.svg',
+  gac:        W + 'GAC_Group_logo.svg',
+  deepal:     W + 'Deepal_global_logo.svg',
+  greatwall:  W + 'GWM_2025_logo.svg',
+  baic:       W + 'BAIC_Motor_logo.svg',
+};
+
+// ─── CAR BRAND SVG LOGOS (fallback) ──────────────────
+const BRAND_LOGOS = {
+  toyota:     `<svg viewBox="0 0 56 40" fill="none"><ellipse cx="28" cy="20" rx="26" ry="13" stroke="white" stroke-width="2.2"/><ellipse cx="20" cy="20" rx="10" ry="18" stroke="white" stroke-width="2.2"/><ellipse cx="36" cy="20" rx="10" ry="18" stroke="white" stroke-width="2.2"/></svg>`,
+  honda:      `<svg viewBox="0 0 40 40"><path d="M4,4 L4,36 L11,36 L11,24 L29,24 L29,36 L36,36 L36,4 L29,4 L29,16 L11,16 L11,4 Z" fill="white"/></svg>`,
+  nissan:     `<svg viewBox="0 0 60 44" fill="none"><ellipse cx="30" cy="22" rx="28" ry="20" stroke="white" stroke-width="2"/><rect x="2" y="16" width="56" height="12" fill="#c3002f"/><text x="30" y="24.5" text-anchor="middle" fill="white" font-family="Arial Narrow,Arial" font-size="6.5" font-weight="900" letter-spacing="2">NISSAN</text></svg>`,
+  mazda:      `<svg viewBox="0 0 60 50" fill="none"><path d="M30,5 L10,38 L17,38 L30,18 L43,38 L50,38 Z" fill="white"/><ellipse cx="30" cy="32" rx="11" ry="8" fill="none" stroke="white" stroke-width="2.5"/></svg>`,
+  mitsubishi: `<svg viewBox="0 0 60 58"><g transform="translate(30,27)"><polygon points="0,-24 9,-10 0,0 -9,-10" fill="white"/><polygon points="0,-24 9,-10 0,0 -9,-10" fill="white" transform="rotate(120)"/><polygon points="0,-24 9,-10 0,0 -9,-10" fill="white" transform="rotate(240)"/></g></svg>`,
+  subaru:     `<svg viewBox="0 0 60 44" fill="none"><ellipse cx="30" cy="22" rx="28" ry="20" stroke="white" stroke-width="1.5"/><circle cx="21" cy="17" r="4.5" fill="white"/><circle cx="30" cy="13" r="3.5" fill="white"/><circle cx="38" cy="17" r="4" fill="white"/><circle cx="37" cy="26" r="3.5" fill="white"/><circle cx="28" cy="30" r="4" fill="white"/><circle cx="19" cy="25" r="3" fill="white"/></svg>`,
+  suzuki:     `<svg viewBox="0 0 52 52" fill="none"><path d="M10,14 Q10,6 20,6 L38,6 Q48,6 48,14 Q48,22 38,22 L16,22 Q10,22 10,32 Q10,42 20,42 L44,42" stroke="white" stroke-width="4.5" stroke-linecap="round"/></svg>`,
+  lexus:      `<svg viewBox="0 0 60 44" fill="none"><ellipse cx="30" cy="22" rx="28" ry="18" stroke="#C9A84C" stroke-width="2.2"/><text x="30" y="30" text-anchor="middle" fill="#C9A84C" font-family="Georgia,Times,serif" font-size="24" font-style="italic" font-weight="300">L</text></svg>`,
+  infiniti:   `<svg viewBox="0 0 60 52" fill="none"><path d="M30,7 L12,34" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"/><path d="M30,7 L48,34" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="16" cy="38" rx="12" ry="9" stroke="#C9A84C" stroke-width="2.5"/><ellipse cx="44" cy="38" rx="12" ry="9" stroke="#C9A84C" stroke-width="2.5"/></svg>`,
+  hyundai:    `<svg viewBox="0 0 60 60" fill="none"><ellipse cx="30" cy="30" rx="27" ry="27" stroke="white" stroke-width="2"/><text x="30" y="41" text-anchor="middle" fill="white" font-family="Arial" font-size="30" font-style="italic" font-weight="700">H</text></svg>`,
+  kia:        `<svg viewBox="0 0 70 44"><text x="35" y="33" text-anchor="middle" fill="white" font-family="Arial Black,Arial" font-size="28" font-weight="900" letter-spacing="-1">KIA</text></svg>`,
+  genesis:    `<svg viewBox="0 0 60 50" fill="none"><path d="M6,25 Q30,4 54,25" stroke="#C9A84C" stroke-width="2.5"/><path d="M6,25 Q30,46 54,25" stroke="#C9A84C" stroke-width="2.5"/><text x="30" y="30" text-anchor="middle" fill="#C9A84C" font-family="Georgia,serif" font-size="16" letter-spacing="1">G</text></svg>`,
+  chery:      `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="white" stroke-width="2"/><polygon points="30,8 34,22 48,22 37,31 41,45 30,36 19,45 23,31 12,22 26,22" fill="white"/></svg>`,
+  haval:      `<svg viewBox="0 0 56 44" fill="none"><path d="M6,36 L6,10 L22,10 L22,20 L34,20 L34,10 L50,10 L50,36" stroke="#e63946" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="6" y1="23" x2="22" y2="23" stroke="#e63946" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  geely:      `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="white" stroke-width="2"/><path d="M44,23 Q44,13 30,13 Q15,13 15,30 Q15,45 30,45 L44,45 L44,33 L33,33" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  byd:        `<svg viewBox="0 0 66 40"><rect x="3" y="4" width="60" height="32" rx="5" fill="none" stroke="white" stroke-width="2"/><text x="33" y="26" text-anchor="middle" fill="white" font-family="Arial Black,Arial" font-size="17" font-weight="900" letter-spacing="3">BYD</text></svg>`,
+  changan:    `<svg viewBox="0 0 60 60" fill="none"><path d="M30,4 L52,30 L30,56 L8,30 Z" stroke="white" stroke-width="2.5"/><path d="M30,14 L45,30 L30,46 L15,30 Z" fill="white"/></svg>`,
+  omoda:      `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="white" stroke-width="2.5"/><circle cx="30" cy="30" r="13" stroke="white" stroke-width="2"/><line x1="30" y1="5" x2="30" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
+  jaecoo:     `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="#C9A84C" stroke-width="2"/><path d="M34,11 L34,37 Q34,49 22,49" stroke="#C9A84C" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  exeed:      `<svg viewBox="0 0 60 54" fill="none"><path d="M8,8 L30,27 L52,8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="27" x2="52" y2="27" stroke="white" stroke-width="2.5" stroke-linecap="round"/><path d="M8,46 L30,27 L52,46" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  gac:        `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="#4dabf7" stroke-width="2"/><path d="M44,20 Q44,12 30,12 Q12,12 12,30 Q12,46 30,46 L44,46 L44,33 L33,33" stroke="#4dabf7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  deepal:     `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="white" stroke-width="1.5"/><path d="M18,12 L18,48 Q18,48 28,48 Q46,48 46,30 Q46,12 28,12 Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+  greatwall:  `<svg viewBox="0 0 60 50" fill="none"><rect x="3" y="3" width="54" height="44" rx="5" stroke="white" stroke-width="2"/><text x="30" y="23" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="700">GREAT</text><text x="30" y="37" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="700">WALL</text></svg>`,
+  baic:       `<svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="25" stroke="white" stroke-width="2"/><path d="M18,12 L18,48 Q24,48 32,48 Q44,48 44,38 Q44,29 32,29 Q44,29 44,20 Q44,12 32,12 Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+};
+
+// ─── CAR BRANDS DATA ─────────────────────────────────
+const CAR_BRANDS = [
+  { name: 'Chery',      model: 'Tiggo / Arrizo',            origin: 'cn', bg: '#c0392b', logo: 'chery'     },
+  { name: 'Haval',      model: 'H6 / Jolion / F7',          origin: 'cn', bg: '#1a1a2e', logo: 'haval'     },
+  { name: 'Geely',      model: 'Atlas / Coolray',            origin: 'cn', bg: '#003087', logo: 'geely'     },
+  { name: 'BYD',        model: 'Seal / Atto / Han',          origin: 'cn', bg: '#157347', logo: 'byd'       },
+  { name: 'Changan',    model: 'CS35 / CS75 / UNI',          origin: 'cn', bg: '#c9372c', logo: 'changan'   },
+  { name: 'Omoda',      model: 'C5 / S5',                    origin: 'cn', bg: '#e05c00', logo: 'omoda'     },
+  { name: 'Jaecoo',     model: 'J7 / J8',                    origin: 'cn', bg: '#1c1c1c', logo: 'jaecoo'    },
+  { name: 'Exeed',      model: 'TXL / RX / VX',              origin: 'cn', bg: '#7a0000', logo: 'exeed'     },
+  { name: 'GAC',        model: 'GS4 / GS8 / Emkoo',          origin: 'cn', bg: '#0d1b2a', logo: 'gac'       },
+  { name: 'Deepal',     model: 'S7 / L07',                   origin: 'cn', bg: '#0a3d8f', logo: 'deepal'    },
+  { name: 'Great Wall', model: 'Poer / Wingle',               origin: 'cn', bg: '#b00000', logo: 'greatwall' },
+  { name: 'BAIC',       model: 'BJ40 / X7',                  origin: 'cn', bg: '#003366', logo: 'baic'      },
+  { name: 'Toyota',     model: 'Camry / RAV4 / Land Cruiser', origin: 'jp', bg: '#cc0000', logo: 'toyota'    },
+  { name: 'Honda',      model: 'CR-V / Accord / Civic',       origin: 'jp', bg: '#cc0000', logo: 'honda'     },
+  { name: 'Nissan',     model: 'X-Trail / Patrol / Qashqai',  origin: 'jp', bg: '#c3002f', logo: 'nissan'    },
+  { name: 'Mazda',      model: 'CX-5 / CX-9 / 6',            origin: 'jp', bg: '#c0392b', logo: 'mazda'     },
+  { name: 'Mitsubishi', model: 'Outlander / Pajero / Eclipse', origin: 'jp', bg: '#cc0000', logo: 'mitsubishi'},
+  { name: 'Subaru',     model: 'Forester / Outback / XV',     origin: 'jp', bg: '#003f88', logo: 'subaru'    },
+  { name: 'Suzuki',     model: 'Vitara / Swift / Jimny',      origin: 'jp', bg: '#003399', logo: 'suzuki'    },
+  { name: 'Lexus',      model: 'RX / LX / ES / GX',          origin: 'jp', bg: '#111111', logo: 'lexus'     },
+  { name: 'Infiniti',   model: 'QX60 / QX80 / Q50',          origin: 'jp', bg: '#181818', logo: 'infiniti'  },
+  { name: 'Hyundai',    model: 'Tucson / Santa Fe / Sonata',  origin: 'kr', bg: '#002c5f', logo: 'hyundai'   },
+  { name: 'Kia',        model: 'Sportage / Sorento / K5',     origin: 'kr', bg: '#05141f', logo: 'kia'       },
+  { name: 'Genesis',    model: 'GV80 / GV70 / G80',          origin: 'kr', bg: '#1a1a1a', logo: 'genesis'   },
+];
+
+function buildBrandCard(b) {
+  const el = document.createElement('div');
+  el.className = 'car-brand-card';
+  el.dataset.origin = b.origin;
+  el.style.setProperty('--brand-bg', b.bg);
+  const wikiUrl = BRAND_URLS[b.logo] || '';
+  const fallbackSvg = BRAND_LOGOS[b.logo] || '';
+  const logoHtml = wikiUrl
+    ? `<img src="${wikiUrl}" alt="${b.name}" class="brand-logo-img" loading="lazy" onerror="this.onerror=null;this.style.display='none';this.parentElement.querySelector('.brand-logo-svg').style.display='flex'"><span class="brand-logo-svg" style="display:none">${fallbackSvg}</span>`
+    : fallbackSvg;
+  el.innerHTML = `
+    <div class="car-brand-logo">${logoHtml}</div>
+    <div class="car-brand-info">
+      <div class="car-brand-name">${b.name}</div>
+      <div class="car-brand-origin">${b.model}</div>
+    </div>`;
+  return el;
+}
+
+function populateBrandsScroll(filter) {
+  const row1 = document.getElementById('scroll-row1');
+  const row2 = document.getElementById('scroll-row2');
+  if (!row1 || !row2) return;
+  row1.innerHTML = '';
+  row2.innerHTML = '';
+  const filtered = filter === 'all' ? CAR_BRANDS : CAR_BRANDS.filter(b => b.origin === filter);
+  const half = Math.ceil(filtered.length / 2);
+  const top = filtered.slice(0, half);
+  const bot = filtered.slice(half);
+  // duplicate for seamless loop
+  [...top, ...top].forEach(b => row1.appendChild(buildBrandCard(b)));
+  [...bot, ...bot].forEach(b => row2.appendChild(buildBrandCard(b)));
+}
+
+function filterBrands(origin) {
+  document.querySelectorAll('.origin-tab').forEach(t => t.classList.remove('active'));
+  const clicked = [...document.querySelectorAll('.origin-tab')]
+    .find(t => t.getAttribute('onclick') === `filterBrands('${origin}')`);
+  if (clicked) clicked.classList.add('active');
+  populateBrandsScroll(origin);
+}
+
+populateBrandsScroll('all');
+</script>
+</body>
+</html>

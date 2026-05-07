@@ -1,0 +1,11 @@
+{
+  "name": "west-parts-07",
+  "version": "1.0.0",
+  "description": "WEST_PARTS.07 — Auto Parts Store Website",
+  "scripts": {
+    "start": "serve . --single -p ${PORT:-3000}"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}
