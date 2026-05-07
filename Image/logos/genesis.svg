@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50">
+  <rect width="120" height="50" fill="#1a1a1a"/>
+  <text x="60" y="33" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="300" fill="#C9A84C" letter-spacing="6">GENESIS</text>
+  <line x1="10" y1="38" x2="110" y2="38" stroke="#C9A84C" stroke-width="0.8" opacity="0.6"/>
+</svg>
