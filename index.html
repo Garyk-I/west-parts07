@@ -935,6 +935,8 @@
       .ob-icon { font-size: 13px; }
       .ob-text { font-size: 10px; }
       .why-ring-dot { width: 7px; height: 7px; }
+      /* Stop badge self-spin on mobile — text stays readable while still orbiting */
+      .why-orbit-badge { animation: none; }
       /* ── video ── */
       .promo-vid { max-height: 240px; }
       /* ── rest ── */
@@ -1682,7 +1684,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span data-i18n="footer_copy">© 2024 WEST_PARTS.07. Все права защищены.</span>
+    <span data-i18n="footer_copy">© 2026 WEST_PARTS.07. Все права защищены.</span>
     <span data-i18n="footer_city">Уральск, Казахстан</span>
   </div>
 </footer>
@@ -1767,7 +1769,7 @@ const i18n = {
     footer_desc: 'Ваш надёжный партнёр в подборе автозапчастей для любых марок. Оригинал. Качество. Гарантия.',
     fc1h: 'Каталог', fc2h: 'Компания', fc3h: 'Контакты',
     fc2_1: 'О нас', fc2_2: 'Бренды', fc2_3: 'Отзывы', fc2_4: 'Как заказать', fc3_4: 'Написать нам',
-    footer_copy: '© 2024 WEST_PARTS.07. Все права защищены.', footer_city: 'Уральск, Казахстан'
+    footer_copy: '© 2026 WEST_PARTS.07. Все права защищены.', footer_city: 'Уральск, Казахстан'
   },
   kz: {
     nav_catalog: 'Каталог', nav_brands: 'Брендтер', nav_how: 'Қалай тапсырыс беру',
@@ -1839,7 +1841,7 @@ const i18n = {
     footer_desc: 'Кез келген маркадағы автобөлшектерді таңдаудағы сенімді серіктесіңіз. Түпнұсқа. Сапа. Кепілдік.',
     fc1h: 'Каталог', fc2h: 'Компания', fc3h: 'Байланыс',
     fc2_1: 'Біз туралы', fc2_2: 'Брендтер', fc2_3: 'Пікірлер', fc2_4: 'Тапсырыс беру', fc3_4: 'Бізге жазу',
-    footer_copy: '© 2024 WEST_PARTS.07. Барлық құқықтар қорғалған.', footer_city: 'Орал, Қазақстан'
+    footer_copy: '© 2026 WEST_PARTS.07. Барлық құқықтар қорғалған.', footer_city: 'Орал, Қазақстан'
   }
 };
 
@@ -1975,19 +1977,19 @@ const BRAND_URLS = {
   infiniti:   'Image/logos/infiniti.svg',
   hyundai:    'Image/logos/hyundai.svg',
   kia:        'Image/logos/kia.svg',
-  genesis:    'Image/logos/genesis.svg',
+  genesis:    'Image/logos/genesis.png',
   chery:      'Image/logos/chery.svg',
   haval:      'Image/logos/haval.svg',
   geely:      'Image/logos/geely.svg',
   byd:        'Image/logos/byd.svg',
-  changan:    'Image/logos/changan.svg',
+  changan:    'Image/logos/changan.png',
   omoda:      'Image/logos/omoda.svg',
   jaecoo:     'Image/logos/jaecoo.svg',
-  exeed:      'Image/logos/exeed.svg',
-  gac:        'Image/logos/gac.svg',
+  exeed:      'Image/logos/exeed.png',
+  gac:        'Image/logos/gac.jpg',
   deepal:     'Image/logos/deepal.svg',
   greatwall:  'Image/logos/greatwall.svg',
-  baic:       'Image/logos/baic.svg',
+  baic:       'Image/logos/baic.png',
 };
 
 // ─── CAR BRAND SVG LOGOS (fallback) ──────────────────
