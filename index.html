@@ -852,22 +852,52 @@
       .categories-grid { grid-template-columns: repeat(2, 1fr); }
       .products-grid { grid-template-columns: repeat(2, 1fr); }
       .why-grid { grid-template-columns: 1fr; }
-      .why-visual { display: none; }
+      /* ── why-visual scaled for tablet ── */
+      .why-visual { height: 360px; }
+      .why-ring-1 { width: 330px; height: 330px; }
+      .why-ring-2 { width: 244px; height: 244px; }
+      .why-ring-3 { width: 160px; height: 160px; }
+      .why-center-card { width: 130px; height: 130px; }
+      .why-center-num { font-size: 36px; }
+      .why-float { display: none; }
+      .wob-2 { right: -42px; }
+      .wob-4 { left: -42px; }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 40px; }
       .steps { grid-template-columns: repeat(2, 1fr); }
       .steps::before { display: none; }
     }
     @media (max-width: 768px) {
       nav { display: none; }
-      nav.open { display: flex; flex-direction: column; position: fixed; top: 72px; left: 0; right: 0; background: rgba(8,8,8,0.98); padding: 24px; gap: 20px; border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); }
+      nav.open { display: flex; flex-direction: column; position: fixed; top: 72px; left: 0; right: 0; background: rgba(8,8,8,0.98); padding: 24px; gap: 20px; border-bottom: 1px solid var(--border); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
       .menu-toggle { display: block; }
       .btn-cta { display: none; }
       section { padding: 64px 24px; }
-      #hero { padding: 100px 24px 60px; }
+      #hero { padding: 100px 24px 220px; }
       .hero-stats { gap: 32px; }
-      .car-wrapper { right: -300px; }
-      .car-svg { width: 280px; }
-      @keyframes carDrive { 100% { right: -20px; opacity: 1; } }
+      /* ── car on mobile ── */
+      .car-wrapper { right: -320px; bottom: 36px; }
+      .car-svg { width: 300px; }
+      @keyframes carDrive { 0% { right: -320px; opacity:0; } 20%{ opacity:1; } 100% { right: -10px; opacity: 1; } }
+      /* ── why-visual scaled for mobile ── */
+      .why-visual { height: 280px; }
+      .why-ring-1 { width: 250px; height: 250px; }
+      .why-ring-2 { width: 182px; height: 182px; }
+      .why-ring-3 { width: 118px; height: 118px; }
+      .why-center-card { width: 100px; height: 100px; }
+      .why-center-num { font-size: 28px; }
+      .why-center-stars { font-size: 10px; }
+      .why-center-label { font-size: 9px; }
+      .why-orbit-badge { padding: 5px 10px; }
+      .ob-icon { font-size: 14px; }
+      .ob-text { font-size: 10px; }
+      .wob-1 { top: -16px; }
+      .wob-3 { bottom: -16px; }
+      .wob-2 { right: -32px; }
+      .wob-4 { left: -32px; }
+      .why-ring-dot { width: 7px; height: 7px; }
+      /* ── video ── */
+      .promo-vid { max-height: 240px; }
+      /* ── rest ── */
       .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .products-grid { grid-template-columns: 1fr; }
       .reviews-grid { grid-template-columns: 1fr; }
@@ -881,6 +911,7 @@
       #cta { padding: 40px 24px; }
       footer { padding: 48px 24px 24px; }
       .hero-title { font-size: 36px; }
+      .hero-brand-name { font-size: 24px; }
     }
   </style>
 </head>
@@ -1057,7 +1088,7 @@
     </div>
     <h2 class="promo-video-title reveal" data-i18n="video_title">WEST_PARTS.07 — в движении</h2>
     <div class="promo-video-player">
-      <video autoplay muted loop playsinline class="promo-vid">
+      <video autoplay muted loop playsinline webkit-playsinline class="promo-vid">
         <source src="Image/auto_anim.mp4" type="video/mp4" />
       </video>
       <div class="promo-video-overlay"></div>
