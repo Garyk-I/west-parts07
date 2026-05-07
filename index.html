@@ -418,58 +418,111 @@
     .cat-card:hover .cat-arrow { opacity: 1; transform: translateX(0); }
 
     /* ─── WHY US ─── */
+    /* ─── WHY US ─── */
     #why { background: var(--bg); }
-    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 56px; }
-    .why-visual {
-      position: relative; display: flex; align-items: center; justify-content: center;
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 64px; }
+
+    /* ── Left animated visual ── */
+    .why-visual { position: relative; display: flex; align-items: center; justify-content: center; height: 480px; }
+    .why-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.18);
     }
-    .why-circle {
-      width: 340px; height: 340px; border-radius: 50%;
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
+    .why-ring-1 { width: 440px; height: 440px; border-style: dashed; animation: spinCW 40s linear infinite; will-change: transform; }
+    .why-ring-2 { width: 320px; height: 320px; animation: spinCCW 26s linear infinite; will-change: transform; }
+    .why-ring-3 { width: 210px; height: 210px; border-color: rgba(201,168,76,0.35); animation: spinCW 16s linear infinite; will-change: transform; }
+    @keyframes spinCW  { to { transform: rotate3d(0,0,1,360deg); } }
+    @keyframes spinCCW { to { transform: rotate3d(0,0,1,-360deg); } }
+    .why-orbit-badge {
+      position: absolute; display: flex; align-items: center; gap: 8px;
+      background: rgba(14,14,14,0.95); border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 40px; padding: 8px 16px; white-space: nowrap;
+      animation: spinCCW 40s linear infinite; will-change: transform;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
     }
-    .why-circle::before {
-      content: ''; position: absolute; inset: -20px; border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.08);
+    .ob-icon { font-size: 18px; }
+    .ob-text { font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
+    .wob-1 { top: -22px; left: 50%; transform: translateX(-50%); }
+    .wob-2 { right: -54px; top: 50%; transform: translateY(-50%); }
+    .wob-3 { bottom: -22px; left: 50%; transform: translateX(-50%); }
+    .wob-4 { left: -54px; top: 50%; transform: translateY(-50%); }
+    .why-ring-dot {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: var(--gold); box-shadow: 0 0 12px var(--gold);
     }
-    .why-circle::after {
-      content: ''; position: absolute; inset: -40px; border-radius: 50%;
-      border: 1px dashed rgba(201,168,76,0.05);
-    }
-    .why-center {
-      width: 200px; height: 200px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.03) 60%, transparent 100%);
-      border: 1px solid rgba(201,168,76,0.25);
+    .wrd-1 { top: -5px; left: 50%; transform: translateX(-50%); }
+    .wrd-2 { bottom: -5px; left: 50%; transform: translateX(-50%); }
+    .why-center-card {
+      position: relative; z-index: 5;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.16) 0%, rgba(201,168,76,0.04) 70%, transparent 100%);
+      border: 2px solid rgba(201,168,76,0.55);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center;
     }
-    .why-center-num { font-size: 40px; font-weight: 900; color: var(--gold); }
-    .why-center-txt { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
-    .why-orbit-item {
-      position: absolute; width: 56px; height: 56px; border-radius: 50%;
-      background: var(--bg3); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    .why-center-card::before {
+      content: ''; position: absolute; inset: -24px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.45) 0%, transparent 70%);
+      filter: blur(18px); pointer-events: none;
+      will-change: opacity;
+      animation: glowPulse 3s ease-in-out infinite;
     }
-    .why-orbit-item:nth-child(1) { top: -8px; left: 50%; transform: translateX(-50%); }
-    .why-orbit-item:nth-child(2) { right: -8px; top: 50%; transform: translateY(-50%); }
-    .why-orbit-item:nth-child(3) { bottom: -8px; left: 50%; transform: translateX(-50%); }
-    .why-orbit-item:nth-child(4) { left: -8px; top: 50%; transform: translateY(-50%); }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.25; }
+      50%       { opacity: 0.7; }
+    }
+    .why-center-num   { font-size: 44px; font-weight: 900; color: var(--gold); line-height: 1; }
+    .why-center-stars { color: var(--gold); font-size: 13px; letter-spacing: 2px; margin: 4px 0; }
+    .why-center-label { font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+    .why-float {
+      position: absolute; z-index: 4;
+      background: rgba(18,18,18,0.94); border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 14px; padding: 12px 18px;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      will-change: transform;
+      animation: floatY 4s ease-in-out infinite;
+    }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .wf-1 { top: 20px;  left: -10px;  animation-delay: 0s; }
+    .wf-2 { top: 20px;  right: -10px; animation-delay: 1.3s; }
+    .wf-3 { bottom: 20px; left: -10px; animation-delay: 2.6s; }
+    .why-float-num { font-size: 22px; font-weight: 900; color: var(--gold); }
+    .why-float-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-    .why-items { display: flex; flex-direction: column; gap: 24px; }
+    /* ── Right benefit cards ── */
+    .why-items { display: flex; flex-direction: column; gap: 14px; }
     .why-item {
       display: flex; gap: 20px; align-items: flex-start;
-      padding: 24px; background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 14px; transition: all 0.3s;
+      padding: 22px 26px; background: var(--bg3);
+      border: 1px solid var(--border); border-left: 3px solid transparent;
+      border-radius: 16px; transition: all 0.35s; position: relative; overflow: hidden;
     }
-    .why-item:hover { border-color: rgba(201,168,76,0.3); transform: translateX(4px); }
+    .why-item::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.35s; pointer-events: none;
+    }
+    .why-item:hover { border-left-color: var(--gold); transform: translateX(6px); box-shadow: -4px 0 30px rgba(201,168,76,0.1), 0 8px 30px rgba(0,0,0,0.3); }
+    .why-item:hover::after { opacity: 1; }
+    .why-item-num { font-size: 10px; font-weight: 800; color: rgba(201,168,76,0.35); letter-spacing: 1px; position: absolute; top: 14px; right: 18px; }
     .why-item-icon {
-      width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
-      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
-      display: flex; align-items: center; justify-content: center; font-size: 20px;
+      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 26px;
     }
-    .why-item-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .why-item-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .wi-1 .why-item-icon { background: rgba(201,168,76,0.12); box-shadow: 0 4px 20px rgba(201,168,76,0.18); }
+    .wi-2 .why-item-icon { background: rgba(37,211,102,0.1);  box-shadow: 0 4px 20px rgba(37,211,102,0.15); }
+    .wi-3 .why-item-icon { background: rgba(74,158,255,0.1);  box-shadow: 0 4px 20px rgba(74,158,255,0.15); }
+    .wi-4 .why-item-icon { background: rgba(255,100,100,0.1); box-shadow: 0 4px 20px rgba(255,100,100,0.15); }
+    .why-item-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .why-item-text  { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+    .why-item-badge {
+      display: inline-block; margin-top: 10px;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+      color: var(--gold); font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px;
+    }
 
     /* ─── PRODUCTS ─── */
     #products { background: var(--bg2); }
@@ -1091,48 +1144,107 @@
 <section id="why">
   <div class="section-label" data-i18n="why_label">Преимущества</div>
   <h2 class="section-title reveal" data-i18n="why_title">Почему выбирают нас</h2>
+
   <div class="why-grid">
-    <div class="why-visual">
-      <div class="why-circle">
-        <span class="why-orbit-item">🏆</span>
-        <span class="why-orbit-item">🚀</span>
-        <span class="why-orbit-item">✅</span>
-        <span class="why-orbit-item">💬</span>
-        <div class="why-center">
-          <span class="why-center-num">5★</span>
-          <span class="why-center-txt" data-i18n="why_rating">РЕЙТИНГ</span>
+
+    <!-- ── Animated visual ── -->
+    <div class="why-visual reveal">
+
+      <!-- Ring 1 (outer dashed, CW) with orbiting badges -->
+      <div class="why-ring why-ring-1">
+        <div class="why-orbit-badge wob-1">
+          <span class="ob-icon">🏆</span>
+          <span class="ob-text" data-i18n="why_b1">Оригинал</span>
+        </div>
+        <div class="why-orbit-badge wob-2">
+          <span class="ob-icon">⚡</span>
+          <span class="ob-text" data-i18n="why_b2">Доставка</span>
+        </div>
+        <div class="why-orbit-badge wob-3">
+          <span class="ob-icon">💬</span>
+          <span class="ob-text" data-i18n="why_b3">Консультация</span>
+        </div>
+        <div class="why-orbit-badge wob-4">
+          <span class="ob-icon">🛡️</span>
+          <span class="ob-text" data-i18n="why_b4">Гарантия</span>
         </div>
       </div>
+
+      <!-- Ring 2 (mid, CCW) with glow dots -->
+      <div class="why-ring why-ring-2">
+        <div class="why-ring-dot wrd-1"></div>
+        <div class="why-ring-dot wrd-2"></div>
+      </div>
+
+      <!-- Ring 3 (inner, CW) -->
+      <div class="why-ring why-ring-3"></div>
+
+      <!-- Floating stat cards -->
+      <div class="why-float wf-1">
+        <div class="why-float-num">10K+</div>
+        <div class="why-float-lbl" data-i18n="stat1">Запчастей</div>
+      </div>
+      <div class="why-float wf-2">
+        <div class="why-float-num">500+</div>
+        <div class="why-float-lbl" data-i18n="stat2">Брендов</div>
+      </div>
+      <div class="why-float wf-3">
+        <div class="why-float-num">5 лет</div>
+        <div class="why-float-lbl" data-i18n="stat3">На рынке</div>
+      </div>
+
+      <!-- Center pulsing card -->
+      <div class="why-center-card">
+        <div class="why-center-num">5</div>
+        <div class="why-center-stars">★★★★★</div>
+        <div class="why-center-label" data-i18n="why_rating">РЕЙТИНГ</div>
+      </div>
+
     </div>
+
+    <!-- ── Benefit cards ── -->
     <div class="why-items">
-      <div class="why-item reveal">
+
+      <div class="why-item wi-1 reveal">
+        <div class="why-item-num">01</div>
         <div class="why-item-icon">🏆</div>
         <div>
           <div class="why-item-title" data-i18n="why1t">Только оригинал</div>
           <div class="why-item-text" data-i18n="why1d">Работаем только с официальными дистрибьюторами. Все запчасти имеют сертификаты подлинности.</div>
+          <span class="why-item-badge" data-i18n="why1badge">100% оригинал</span>
         </div>
       </div>
-      <div class="why-item reveal reveal-delay-1">
-        <div class="why-item-icon">⚡</div>
+
+      <div class="why-item wi-2 reveal reveal-delay-1">
+        <div class="why-item-num">02</div>
+        <div class="why-item-icon">🚚</div>
         <div>
           <div class="why-item-title" data-i18n="why2t">Быстрая доставка</div>
           <div class="why-item-text" data-i18n="why2d">Доставка по Уральску в день заказа. По Казахстану — 1–3 рабочих дня.</div>
+          <span class="why-item-badge" data-i18n="why2badge">Весь Казахстан</span>
         </div>
       </div>
-      <div class="why-item reveal reveal-delay-2">
+
+      <div class="why-item wi-3 reveal reveal-delay-2">
+        <div class="why-item-num">03</div>
         <div class="why-item-icon">💬</div>
         <div>
           <div class="why-item-title" data-i18n="why3t">Экспертная консультация</div>
           <div class="why-item-text" data-i18n="why3d">Наши специалисты помогут подобрать нужную запчасть по VIN-коду или описанию.</div>
+          <span class="why-item-badge" data-i18n="why3badge">Ответ за 15 мин</span>
         </div>
       </div>
-      <div class="why-item reveal reveal-delay-3">
+
+      <div class="why-item wi-4 reveal reveal-delay-3">
+        <div class="why-item-num">04</div>
         <div class="why-item-icon">🛡️</div>
         <div>
           <div class="why-item-title" data-i18n="why4t">Гарантия на все товары</div>
           <div class="why-item-text" data-i18n="why4d">Предоставляем гарантию на каждую запчасть. Обмен или возврат без лишних вопросов.</div>
+          <span class="why-item-badge" data-i18n="why4badge">Гарантия + возврат</span>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -1527,10 +1639,11 @@ const i18n = {
     cat7: 'Кузовные детали', cat7c: '700+ запчастей',
     cat8: 'Аксессуары', cat8c: '300+ позиций',
     why_label: 'Преимущества', why_title: 'Почему выбирают нас', why_rating: 'РЕЙТИНГ',
-    why1t: 'Только оригинал', why1d: 'Работаем только с официальными дистрибьюторами. Все запчасти имеют сертификаты подлинности.',
-    why2t: 'Быстрая доставка', why2d: 'Доставка по Уральску в день заказа. По Казахстану — 1–3 рабочих дня.',
-    why3t: 'Экспертная консультация', why3d: 'Наши специалисты помогут подобрать нужную запчасть по VIN-коду или описанию.',
-    why4t: 'Гарантия на все товары', why4d: 'Предоставляем гарантию на каждую запчасть. Обмен или возврат без лишних вопросов.',
+    why_b1: 'Оригинал', why_b2: 'Доставка', why_b3: 'Консультация', why_b4: 'Гарантия',
+    why1t: 'Только оригинал', why1d: 'Работаем только с официальными дистрибьюторами. Все запчасти имеют сертификаты подлинности.', why1badge: '100% оригинал',
+    why2t: 'Быстрая доставка', why2d: 'Доставка по Уральску в день заказа. По Казахстану — 1–3 рабочих дня.', why2badge: 'Весь Казахстан',
+    why3t: 'Экспертная консультация', why3d: 'Наши специалисты помогут подобрать нужную запчасть по VIN-коду или описанию.', why3badge: 'Ответ за 15 мин',
+    why4t: 'Гарантия на все товары', why4d: 'Предоставляем гарантию на каждую запчасть. Обмен или возврат без лишних вопросов.', why4badge: 'Гарантия + возврат',
     prod_label: 'Популярное', prod_title: 'Популярные товары',
     prod_sub: 'Самые востребованные запчасти по лучшим ценам',
     badge_hit: 'ХИТ', badge_new: 'НОВИНКА', badge_sale: '–20%',
@@ -1598,10 +1711,11 @@ const i18n = {
     cat7: 'Кузов бөлшектері', cat7c: '700+ бөлшек',
     cat8: 'Аксессуарлар', cat8c: '300+ позиция',
     why_label: 'Артықшылықтар', why_title: 'Неге бізді таңдайды', why_rating: 'РЕЙТИНГ',
-    why1t: 'Тек түпнұсқа', why1d: 'Тек ресми дистрибьюторлармен жұмыс істейміз. Барлық бөлшектерде шынайылық сертификаты бар.',
-    why2t: 'Жылдам жеткізу', why2d: 'Оралда тапсырыс берген күні жеткізу. Қазақстан бойынша — 1–3 жұмыс күні.',
-    why3t: 'Сарапшы кеңесі', why3d: 'Мамандарымыз VIN-код немесе сипаттама бойынша қажетті бөлшекті таңдауға көмектеседі.',
-    why4t: 'Барлық тауарға кепілдік', why4d: 'Әр бөлшекке кепілдік беріледі. Артық сұраусыз айырбас немесе қайтару.',
+    why_b1: 'Түпнұсқа', why_b2: 'Жеткізу', why_b3: 'Кеңес', why_b4: 'Кепілдік',
+    why1t: 'Тек түпнұсқа', why1d: 'Тек ресми дистрибьюторлармен жұмыс істейміз. Барлық бөлшектерде шынайылық сертификаты бар.', why1badge: '100% түпнұсқа',
+    why2t: 'Жылдам жеткізу', why2d: 'Оралда тапсырыс берген күні жеткізу. Қазақстан бойынша — 1–3 жұмыс күні.', why2badge: 'Бүкіл ҚР',
+    why3t: 'Сарапшы кеңесі', why3d: 'Мамандарымыз VIN-код немесе сипаттама бойынша қажетті бөлшекті таңдауға көмектеседі.', why3badge: '15 минутта жауап',
+    why4t: 'Барлық тауарға кепілдік', why4d: 'Әр бөлшекке кепілдік беріледі. Артық сұраусыз айырбас немесе қайтару.', why4badge: 'Кепілдік + қайтару',
     prod_label: 'Танымал', prod_title: 'Танымал тауарлар',
     prod_sub: 'Ең сұранысты бөлшектер ең жақсы бағамен',
     badge_hit: 'ХИТ', badge_new: 'ЖАҢА', badge_sale: '–20%',
