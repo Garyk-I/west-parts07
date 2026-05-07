@@ -441,6 +441,12 @@
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
     }
+    .badge-inner {
+      display: flex; align-items: center; gap: 8px;
+      will-change: transform;
+      animation: selfSpin 4s linear infinite;
+    }
+    @keyframes selfSpin { to { transform: rotate3d(0,0,1,360deg); } }
     .ob-icon { font-size: 18px; }
     .ob-text { font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
     .wob-1 { top: -22px; left: 50%; transform: translateX(-50%); }
@@ -1184,20 +1190,28 @@
       <!-- Ring 1 (outer dashed, CW) with orbiting badges -->
       <div class="why-ring why-ring-1">
         <div class="why-orbit-badge wob-1">
-          <span class="ob-icon">🏆</span>
-          <span class="ob-text" data-i18n="why_b1">Оригинал</span>
+          <div class="badge-inner">
+            <span class="ob-icon">🏆</span>
+            <span class="ob-text" data-i18n="why_b1">Оригинал</span>
+          </div>
         </div>
         <div class="why-orbit-badge wob-2">
-          <span class="ob-icon">⚡</span>
-          <span class="ob-text" data-i18n="why_b2">Доставка</span>
+          <div class="badge-inner">
+            <span class="ob-icon">⚡</span>
+            <span class="ob-text" data-i18n="why_b2">Доставка</span>
+          </div>
         </div>
         <div class="why-orbit-badge wob-3">
-          <span class="ob-icon">💬</span>
-          <span class="ob-text" data-i18n="why_b3">Консультация</span>
+          <div class="badge-inner">
+            <span class="ob-icon">💬</span>
+            <span class="ob-text" data-i18n="why_b3">Консультация</span>
+          </div>
         </div>
         <div class="why-orbit-badge wob-4">
-          <span class="ob-icon">🛡️</span>
-          <span class="ob-text" data-i18n="why_b4">Гарантия</span>
+          <div class="badge-inner">
+            <span class="ob-icon">🛡️</span>
+            <span class="ob-text" data-i18n="why_b4">Гарантия</span>
+          </div>
         </div>
       </div>
 
