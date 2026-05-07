@@ -335,6 +335,29 @@
     }
     .section-sub { font-size: 16px; color: var(--text-muted); max-width: 560px; line-height: 1.7; }
 
+    /* ─── PROMO VIDEO ─── */
+    #promo-video { background: var(--bg); padding: 80px 80px 0; }
+    .promo-video-title {
+      font-size: clamp(24px, 3vw, 40px); font-weight: 800;
+      margin-bottom: 32px; letter-spacing: -0.5px;
+    }
+    .promo-video-player {
+      position: relative; border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    }
+    .promo-vid {
+      display: block; width: 100%; max-height: 540px;
+      object-fit: cover;
+    }
+    .promo-video-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, transparent 60%, rgba(8,8,8,0.5) 100%);
+    }
+    @media (max-width: 768px) {
+      #promo-video { padding: 64px 24px 0; }
+    }
+
     /* ─── MARQUEE STRIP ─── */
     .marquee-section {
       padding: 0; overflow: hidden;
@@ -629,6 +652,7 @@
     }
 
     /* ─── UTILITY ─── */
+    .text-gold { color: var(--gold); }
     .gold-link { color: var(--gold); text-decoration: none; }
     .gold-link:hover { text-decoration: underline; }
     .btn-center { justify-content: center; }
@@ -972,6 +996,22 @@
   </div>
 </section>
 
+<!-- PROMO VIDEO -->
+<section id="promo-video">
+  <div class="promo-video-wrap reveal">
+    <div class="promo-video-label">
+      <span class="section-label" data-i18n="video_label">О нас</span>
+    </div>
+    <h2 class="promo-video-title reveal" data-i18n="video_title">WEST_PARTS.07 — в движении</h2>
+    <div class="promo-video-player">
+      <video autoplay muted loop playsinline class="promo-vid">
+        <source src="Image/auto_anim.mp4" type="video/mp4" />
+      </video>
+      <div class="promo-video-overlay"></div>
+    </div>
+  </div>
+</section>
+
 <!-- MARQUEE -->
 <div class="marquee-section">
   <div class="marquee-track" id="marquee">
@@ -1114,7 +1154,7 @@
         <div class="product-compat" data-i18n="prod1c">Toyota, Honda, Kia, Hyundai</div>
         <div class="product-footer">
           <div class="product-price">2 800 ₸</div>
-          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+          <button type="button" class="product-btn" data-i18n="prod_buy">Заказать</button>
         </div>
       </div>
     </div>
@@ -1129,7 +1169,7 @@
         <div class="product-compat" data-i18n="prod2c">BMW 3 series, Mercedes C-class</div>
         <div class="product-footer">
           <div class="product-price">18 500 ₸</div>
-          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+          <button type="button" class="product-btn" data-i18n="prod_buy">Заказать</button>
         </div>
       </div>
     </div>
@@ -1141,7 +1181,7 @@
         <div class="product-compat" data-i18n="prod3c">Volkswagen, Audi, Skoda</div>
         <div class="product-footer">
           <div class="product-price">65 000 ₸</div>
-          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+          <button type="button" class="product-btn" data-i18n="prod_buy">Заказать</button>
         </div>
       </div>
     </div>
@@ -1156,7 +1196,7 @@
         <div class="product-compat" data-i18n="prod4c">Opel, Chevrolet, Daewoo</div>
         <div class="product-footer">
           <div class="product-price">4 200 ₸</div>
-          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+          <button type="button" class="product-btn" data-i18n="prod_buy">Заказать</button>
         </div>
       </div>
     </div>
@@ -1168,7 +1208,7 @@
         <div class="product-compat" data-i18n="prod5c">Универсальное, все марки</div>
         <div class="product-footer">
           <div class="product-price">22 000 ₸</div>
-          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+          <button type="button" class="product-btn" data-i18n="prod_buy">Заказать</button>
         </div>
       </div>
     </div>
@@ -1183,7 +1223,7 @@
         <div class="product-compat" data-i18n="prod6c">Все легковые автомобили</div>
         <div class="product-footer">
           <div class="product-price">38 000 ₸</div>
-          <button class="product-btn" data-i18n="prod_buy">Заказать</button>
+          <button type="button" class="product-btn" data-i18n="prod_buy">Заказать</button>
         </div>
       </div>
     </div>
@@ -1320,7 +1360,7 @@
 <section id="cta">
   <div class="cta-inner reveal">
     <div>
-      <h2 class="cta-title" data-i18n="cta_title">Нужна запчасть?<br/><span style="color:var(--gold)">Напишите сейчас!</span></h2>
+      <h2 class="cta-title" data-i18n="cta_title">Нужна запчасть?<br/><span class="text-gold">Напишите сейчас!</span></h2>
       <p class="cta-sub" data-i18n="cta_sub">Ответим за 15 минут и подберём нужную деталь</p>
     </div>
     <div class="cta-actions">
@@ -1521,7 +1561,7 @@ const i18n = {
     rev2n: 'Дина М.', rev2c: 'Уральск',
     rev3t: '«Качество отличное, всё с гарантией. Брал аккумулятор Varta и масло Mobil — доволен на 100%. Магазин с профессиональным подходом.»',
     rev3n: 'Руслан К.', rev3c: 'Атырау',
-    cta_title: 'Нужна запчасть?<br/><span style="color:var(--gold)">Напишите сейчас!</span>',
+    cta_title: 'Нужна запчасть?<br/><span class="text-gold">Напишите сейчас!</span>',
     cta_sub: 'Ответим за 15 минут и подберём нужную деталь',
     cta_btn: 'WhatsApp', cta_btn2: 'Позвонить',
     cont_label: 'Контакты', cont_title: 'Свяжитесь с нами',
@@ -1592,7 +1632,7 @@ const i18n = {
     rev2n: 'Дина М.', rev2c: 'Орал',
     rev3t: '«Сапасы керемет, барлығы кепілдікпен. Varta аккумуляторы мен Mobil майын алдым — 100% қанағаттанамын. Кәсіби қызмет.»',
     rev3n: 'Руслан К.', rev3c: 'Атырау',
-    cta_title: 'Бөлшек керек пе?<br/><span style="color:var(--gold)">Қазір жазыңыз!</span>',
+    cta_title: 'Бөлшек керек пе?<br/><span class="text-gold">Қазір жазыңыз!</span>',
     cta_sub: '15 минутта жауап береміз және қажетті бөлшекті таңдаймыз',
     cta_btn: 'WhatsApp', cta_btn2: 'Қоңырау шалу',
     cont_label: 'Байланыс', cont_title: 'Бізбен байланысыңыз',
