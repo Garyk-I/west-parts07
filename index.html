@@ -447,29 +447,44 @@
     .why-ring-3 { width: 210px; height: 210px; border-color: rgba(201,168,76,0.35); animation: spinCW 16s linear infinite; will-change: transform; }
     @keyframes spinCW  { to { transform: rotate3d(0,0,1,360deg); } }
     @keyframes spinCCW { to { transform: rotate3d(0,0,1,-360deg); } }
-    /* Layer 1: zero-size pivot point, counter-rotates to cancel ring spin */
-    .wob-pos {
-      position: absolute; width: 0; height: 0; overflow: visible;
+    /*
+     * 2-layer orbit badge:
+     * Layer 1 (.wob-counter) — fixed-size box centred EXACTLY on the ring
+     *   circumference; counter-rotates to cancel the ring's CW spin.
+     * Layer 2 (.why-orbit-badge) — visible badge (border + icon + text);
+     *   self-spins around its own centre inside the counter-rotation wrapper.
+     *
+     * Badge box size: 164 × 42 px  → half-w = 82 px, half-h = 21 px
+     * Positions place the BOX CENTRE on the ring line:
+     *   wob-1: top edge  → top:  −21px, left: calc(50% − 82px)
+     *   wob-2: right edge → right: −82px, top:  calc(50% − 21px)
+     *   wob-3: bottom edge → bottom: −21px, left: calc(50% − 82px)
+     *   wob-4: left edge  → left: −82px, top:  calc(50% − 21px)
+     */
+    .wob-counter {
+      position: absolute;
+      width: 164px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
       will-change: transform;
       animation: spinCCW 40s linear infinite;
     }
-    .wob-1 { top: -22px; left: 50%; }
-    .wob-2 { right: -54px; top: 50%; }
-    .wob-3 { bottom: -22px; left: 50%; }
-    .wob-4 { left: -54px; top: 50%; }
-    /* Layer 2: static centering, no animation — avoids transform conflict */
-    .wob-center { transform: translate(-50%, -50%); display: flex; }
-    /* Layer 3: the visible badge (border + content) self-spins */
+    .wob-1 { top: -21px;  left: calc(50% - 82px); }
+    .wob-2 { right: -82px; top: calc(50% - 21px); }
+    .wob-3 { bottom: -21px; left: calc(50% - 82px); }
+    .wob-4 { left: -82px;  top: calc(50% - 21px); }
+
+    /* Badge self-spins around its own centre */
     .why-orbit-badge {
-      display: flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; gap: 8px;
       background: rgba(14,14,14,0.95); border: 1px solid rgba(201,168,76,0.35);
-      border-radius: 40px; padding: 8px 16px; white-space: nowrap;
+      border-radius: 40px; padding: 7px 14px; white-space: nowrap;
       -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
       will-change: transform;
+      transform-box: fill-box; transform-origin: center;
       animation: selfSpin 4s linear infinite;
     }
     @keyframes selfSpin { to { transform: rotate3d(0,0,1,360deg); } }
-    .ob-icon { font-size: 18px; }
+    .ob-icon { font-size: 17px; }
     .ob-text { font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
     .why-ring-dot {
       position: absolute; width: 10px; height: 10px; border-radius: 50%;
@@ -910,13 +925,15 @@
       .why-center-num { font-size: 28px; }
       .why-center-stars { font-size: 10px; }
       .why-center-label { font-size: 9px; }
-      .why-orbit-badge { padding: 5px 10px; }
-      .ob-icon { font-size: 14px; }
+      /* badge box: 130×34px on mobile → half-w=65, half-h=17 */
+      .wob-counter { width: 130px; height: 34px; }
+      .wob-1 { top: -17px;  left: calc(50% - 65px); }
+      .wob-2 { right: -65px; top: calc(50% - 17px); }
+      .wob-3 { bottom: -17px; left: calc(50% - 65px); }
+      .wob-4 { left: -65px;  top: calc(50% - 17px); }
+      .why-orbit-badge { padding: 4px 8px; }
+      .ob-icon { font-size: 13px; }
       .ob-text { font-size: 10px; }
-      .wob-1 { top: -16px; }
-      .wob-3 { bottom: -16px; }
-      .wob-2 { right: -32px; }
-      .wob-4 { left: -32px; }
       .why-ring-dot { width: 7px; height: 7px; }
       /* ── video ── */
       .promo-vid { max-height: 240px; }
@@ -1206,30 +1223,30 @@
 
       <!-- Ring 1 (outer dashed, CW) with orbiting badges -->
       <div class="why-ring why-ring-1">
-        <div class="wob-pos wob-1"><div class="wob-center">
+        <div class="wob-counter wob-1">
           <div class="why-orbit-badge">
             <span class="ob-icon">🏆</span>
             <span class="ob-text" data-i18n="why_b1">Оригинал</span>
           </div>
-        </div></div>
-        <div class="wob-pos wob-2"><div class="wob-center">
+        </div>
+        <div class="wob-counter wob-2">
           <div class="why-orbit-badge">
             <span class="ob-icon">⚡</span>
             <span class="ob-text" data-i18n="why_b2">Доставка</span>
           </div>
-        </div></div>
-        <div class="wob-pos wob-3"><div class="wob-center">
+        </div>
+        <div class="wob-counter wob-3">
           <div class="why-orbit-badge">
             <span class="ob-icon">💬</span>
             <span class="ob-text" data-i18n="why_b3">Консультация</span>
           </div>
-        </div></div>
-        <div class="wob-pos wob-4"><div class="wob-center">
+        </div>
+        <div class="wob-counter wob-4">
           <div class="why-orbit-badge">
             <span class="ob-icon">🛡️</span>
             <span class="ob-text" data-i18n="why_b4">Гарантия</span>
           </div>
-        </div></div>
+        </div>
       </div>
 
       <!-- Ring 2 (mid, CCW) with glow dots -->
