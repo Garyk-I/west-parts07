@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WEST_PARTS.07 — Автозапчасти</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --gold: #C9A84C;
@@ -23,10 +24,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
       overflow-x: hidden;
+    }
+    /* ── Typography ── */
+    .hero-title, .hero-brand-name, .section-title, .cta-title {
+      font-family: 'Syne', sans-serif;
+    }
+    .hero-sub, .section-sub, .section-label, nav a, .lang-btn,
+    .btn-primary, .btn-secondary, .btn-cta, .btn-whatsapp, .btn-2gis {
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     /* ─── SCROLLBAR ─── */
@@ -157,14 +166,19 @@
 
     /* Car SVG animation */
     .car-wrapper {
-      position: absolute; bottom: 36px; right: -520px;
-      animation: carDrive 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+      position: absolute; bottom: 36px; right: 40px;
+      transform: translateX(calc(-100vw - 560px));
+      opacity: 0;
       filter: drop-shadow(0 0 30px rgba(201,168,76,0.4)) drop-shadow(0 4px 16px rgba(0,0,0,0.8));
+      will-change: transform, opacity;
     }
-    @keyframes carDrive {
-      0% { right: -520px; opacity: 0; }
-      20% { opacity: 1; }
-      100% { right: 40px; opacity: 1; }
+    .car-wrapper.car-running {
+      animation: carDriveFromLeft 1.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes carDriveFromLeft {
+      0%   { transform: translateX(calc(-100vw - 560px)); opacity: 0; }
+      15%  { opacity: 1; }
+      100% { transform: translateX(0); opacity: 1; }
     }
     .car-svg { width: 480px; }
 
@@ -433,26 +447,30 @@
     .why-ring-3 { width: 210px; height: 210px; border-color: rgba(201,168,76,0.35); animation: spinCW 16s linear infinite; will-change: transform; }
     @keyframes spinCW  { to { transform: rotate3d(0,0,1,360deg); } }
     @keyframes spinCCW { to { transform: rotate3d(0,0,1,-360deg); } }
+    /* Layer 1: zero-size pivot point, counter-rotates to cancel ring spin */
+    .wob-pos {
+      position: absolute; width: 0; height: 0; overflow: visible;
+      will-change: transform;
+      animation: spinCCW 40s linear infinite;
+    }
+    .wob-1 { top: -22px; left: 50%; }
+    .wob-2 { right: -54px; top: 50%; }
+    .wob-3 { bottom: -22px; left: 50%; }
+    .wob-4 { left: -54px; top: 50%; }
+    /* Layer 2: static centering, no animation — avoids transform conflict */
+    .wob-center { transform: translate(-50%, -50%); display: flex; }
+    /* Layer 3: the visible badge (border + content) self-spins */
     .why-orbit-badge {
-      position: absolute; display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; gap: 8px;
       background: rgba(14,14,14,0.95); border: 1px solid rgba(201,168,76,0.35);
       border-radius: 40px; padding: 8px 16px; white-space: nowrap;
-      animation: spinCCW 40s linear infinite; will-change: transform;
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-    }
-    .badge-inner {
-      display: flex; align-items: center; gap: 8px;
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
       will-change: transform;
       animation: selfSpin 4s linear infinite;
     }
     @keyframes selfSpin { to { transform: rotate3d(0,0,1,360deg); } }
     .ob-icon { font-size: 18px; }
     .ob-text { font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
-    .wob-1 { top: -22px; left: 50%; transform: translateX(-50%); }
-    .wob-2 { right: -54px; top: 50%; transform: translateY(-50%); }
-    .wob-3 { bottom: -22px; left: 50%; transform: translateX(-50%); }
-    .wob-4 { left: -54px; top: 50%; transform: translateY(-50%); }
     .why-ring-dot {
       position: absolute; width: 10px; height: 10px; border-radius: 50%;
       background: var(--gold); box-shadow: 0 0 12px var(--gold);
@@ -881,9 +899,8 @@
       #hero { padding: 100px 24px 220px; }
       .hero-stats { gap: 32px; }
       /* ── car on mobile ── */
-      .car-wrapper { right: -320px; bottom: 36px; }
       .car-svg { width: 300px; }
-      @keyframes carDrive { 0% { right: -320px; opacity:0; } 20%{ opacity:1; } 100% { right: -10px; opacity: 1; } }
+      @keyframes carDriveFromLeft { 100% { transform: translateX(0); opacity: 1; } }
       /* ── why-visual scaled for mobile ── */
       .why-visual { height: 280px; }
       .why-ring-1 { width: 250px; height: 250px; }
@@ -1189,30 +1206,30 @@
 
       <!-- Ring 1 (outer dashed, CW) with orbiting badges -->
       <div class="why-ring why-ring-1">
-        <div class="why-orbit-badge wob-1">
-          <div class="badge-inner">
+        <div class="wob-pos wob-1"><div class="wob-center">
+          <div class="why-orbit-badge">
             <span class="ob-icon">🏆</span>
             <span class="ob-text" data-i18n="why_b1">Оригинал</span>
           </div>
-        </div>
-        <div class="why-orbit-badge wob-2">
-          <div class="badge-inner">
+        </div></div>
+        <div class="wob-pos wob-2"><div class="wob-center">
+          <div class="why-orbit-badge">
             <span class="ob-icon">⚡</span>
             <span class="ob-text" data-i18n="why_b2">Доставка</span>
           </div>
-        </div>
-        <div class="why-orbit-badge wob-3">
-          <div class="badge-inner">
+        </div></div>
+        <div class="wob-pos wob-3"><div class="wob-center">
+          <div class="why-orbit-badge">
             <span class="ob-icon">💬</span>
             <span class="ob-text" data-i18n="why_b3">Консультация</span>
           </div>
-        </div>
-        <div class="why-orbit-badge wob-4">
-          <div class="badge-inner">
+        </div></div>
+        <div class="wob-pos wob-4"><div class="wob-center">
+          <div class="why-orbit-badge">
             <span class="ob-icon">🛡️</span>
             <span class="ob-text" data-i18n="why_b4">Гарантия</span>
           </div>
-        </div>
+        </div></div>
       </div>
 
       <!-- Ring 2 (mid, CCW) with glow dots -->
@@ -1883,11 +1900,49 @@ function animateCounters() {
 }
 animateCounters();
 
-// ─── START WHEELS WHEN CAR ARRIVES ───────────────────
-(function() {
-  const car = document.querySelector('.car-wrapper');
-  if (!car) return;
-  car.addEventListener('animationend', () => car.classList.add('arrived'), { once: true });
+// ─── CAR: scroll-triggered, drives from left, loops every 6-7s ──
+(function setupCar() {
+  const car   = document.querySelector('.car-wrapper');
+  const hero  = document.querySelector('#hero');
+  if (!car || !hero) return;
+
+  let loopTimer  = null;
+  let heroActive = false;
+
+  function resetCar() {
+    car.classList.remove('car-running', 'arrived');
+    car.style.animation = 'none';
+    void car.offsetWidth;           // force reflow so CSS restores initial state
+    car.style.animation = '';
+  }
+
+  function playCar() {
+    resetCar();
+    requestAnimationFrame(() => {
+      car.classList.add('car-running');
+      car.addEventListener('animationend', function onEnd() {
+        car.classList.add('arrived');
+        if (heroActive) {
+          loopTimer = setTimeout(playCar, 6500 + Math.random() * 500);
+        }
+      }, { once: true });
+    });
+  }
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        heroActive = true;
+        playCar();
+      } else {
+        heroActive = false;
+        clearTimeout(loopTimer);
+        resetCar();
+      }
+    });
+  }, { threshold: 0.4 });
+
+  obs.observe(hero);
 })();
 
 // ─── WIKIMEDIA LOGO URLS ─────────────────────────────
